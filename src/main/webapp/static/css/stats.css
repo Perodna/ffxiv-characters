@@ -1,0 +1,67 @@
+/* make sidebar nav vertical */ 
+@media (min-width: 768px) {
+  .sidebar-nav .navbar .navbar-collapse {
+    padding: 0;
+    max-height: none;
+  }
+  .sidebar-nav .navbar ul {
+    float: none;
+    display: block;
+  }
+  .sidebar-nav .navbar li {
+    float: none;
+    display: block;
+  }
+  .sidebar-nav .navbar li a {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+/* columns of same height styles */
+.row-same-height {
+    display: table;
+    width: 100%;
+}
+.col-md-height {
+    display: table-cell;
+    float: none !important;
+    vertical-align: middle;
+}
+
+/* Vertically centered rows */
+.table tbody>tr>td.vert-align {
+	vertical-align: middle;
+}
+
+/* Jobs badges */
+.badge-PLD {
+	background-color: #28459D;
+}
+.badge-WAR {
+	background-color: #425DAE;
+}
+.badge-WHM {
+	background-color: #116416;
+}
+.badge-SCH {
+	background-color: #54A759;
+}
+.badge-MNK {
+	background-color: #E93325;
+}
+.badge-DRG {
+	background-color: #FF594C;
+}
+.badge-NIN {
+	background-color: #FF978F;
+}
+.badge-BRD {
+	background-color: #FF814C;
+}
+.badge-BLM {
+	background-color: #E98925;
+}
+.badge-SMN {
+	background-color: #FFA84C;
+}
