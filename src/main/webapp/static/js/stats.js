@@ -101,8 +101,6 @@ function getSeriesForLineChartData(dataTable) {
 		series[i-1] = { color: getJobColorCode(view.getColumnId(i)), job: view.getColumnId(i) };
 	}
 	
-	console.log(series);
-	
 	return series;
 }
 

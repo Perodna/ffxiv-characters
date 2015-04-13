@@ -29,5 +29,4 @@ public class XIVConfiguration extends WebMvcConfigurerAdapter {
  
         return viewResolver;
     }
- 
 }

@@ -36,13 +36,11 @@
 		var data = new google.visualization.DataTable(jsonData);
 
 		var options = {
-			chart : { title : 'iLevel evolution by job' },
-// 			width : "100%",
+			chart : { title : 'iLevel evolution by job' }, // not used by standard line chart, hopefully the functionality is added soon
+			width : "100%",
 			height : 500,
-			series : getSeriesForLineChartData(data)
+			series : getSeriesForLineChartData(data) // series color change not supported by Material Line chart, reason why we stick to standard line chart
 		};
-
-		console.log(options);
 
 		var chart = new google.visualization.LineChart(document.getElementById('job_lvl_evolution'));
 
@@ -94,8 +92,13 @@
 					<p>Alt jobs: <c:forEach items="${c.altJobs}" var="j"><span class="badge badge-${j.shortName}">${j.shortName}</span>&nbsp;</c:forEach></p>
 					
 					<div>
-						<p>Job level evolution</p>
-						<div id="job_lvl_evolution"></div>
+					<!-- Won't work for a character with a quote ' in his name -->
+					<p><a href="http://www.inwilis.fr/inventaire/char.php?name=${c.firstName}%20${c.lastName}">Open gear details</a></p>
+					</div>
+					
+					<div>
+						<h5 align="center">iLevel evolution by job</h5>
+						<div align="center" id="job_lvl_evolution"></div>
 					</div>
 				</div>
 			</div>
