@@ -70,7 +70,4 @@ public class XIVJob {
 	public void setRole(XIVRole role) {
 		this.role = role;
 	}
-	
-	
-	
 }

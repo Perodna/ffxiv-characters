@@ -72,9 +72,9 @@
 						<tbody>
 							<c:forEach items="${chars}" var="c">
 							<tr>
-								<td>${c.firstName} ${c.lastName}</td>
-								<td><span class="badge badge-${c.mainJob.shortName}">${c.mainJob.shortName}</span></td>
-								<td><c:forEach items="${c.altJobs}" var="j"><span class="badge badge-${j.shortName}">${j.shortName}</span>&nbsp;</c:forEach></td>
+								<td class="vert-align"><a href="character?chardId=${c.id}">${c.firstName} ${c.lastName}</a></td>
+								<td class="vert-align"><span class="badge badge-${c.mainJob.shortName}">${c.mainJob.shortName}</span></td>
+								<td class="vert-align"><c:forEach items="${c.altJobs}" var="j"><span class="badge badge-${j.shortName}">${j.shortName}</span>&nbsp;</c:forEach></td>
 							</tr>
 							</c:forEach>
 						</tbody>

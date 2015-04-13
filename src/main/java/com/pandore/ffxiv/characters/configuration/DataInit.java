@@ -53,7 +53,7 @@ public class DataInit {
 		jobRepo.save(smn);
 		
 		// save some characters
-		saveNewChar(charRepo, jobInfoRepo, "Vivishu", "Vishu", sch, whm, blm, smn);
+		saveNewChar(charRepo, jobInfoRepo, "Vivishu", "Vishu", sch, whm, blm, smn, war, mnk);
 		saveNewChar(charRepo, jobInfoRepo, "Myobi", "Yui", whm, pld, smn);
         saveNewChar(charRepo, jobInfoRepo, "Itani", "Valkyrie", brd, whm);
         saveNewChar(charRepo, jobInfoRepo, "Reynhart", "Kristensen", pld, drg, war);
@@ -125,15 +125,21 @@ public class DataInit {
 		Random rng = new Random();
 		
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DATE, -rng.nextInt(100)); // start date between -100 days and now
+		// set to 00:00:00.000
+		cal.set(Calendar.HOUR, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		
+		cal.add(Calendar.DATE, -50-rng.nextInt(50)); // start date between -100 days and -50 days
 		Integer level = 50; // initial level
 		Integer iLevel = 70; // initial iLevel
 		
 		infos.add(new XIVJobInfo(character, job, cal.getTime(), iLevel, level));
 		
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 15; i++) {
 			cal.add(Calendar.DATE, rng.nextInt(20));
-			iLevel += rng.nextInt(20);
+			iLevel += rng.nextInt(5);
 			if (iLevel > 130) { // max level 130
 				infos.add(new XIVJobInfo(character, job, cal.getTime(), 130, level));
 				break;
