@@ -12,8 +12,11 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.pandore.ffxiv.characters.charts.JsonChartData;
 import com.pandore.ffxiv.characters.persist.config.JobRepository;
 import com.pandore.ffxiv.characters.persist.entity.XIVJob;
 
@@ -26,17 +29,49 @@ public class JobStatsController implements BeanFactoryAware {
 		jobRepo = context.getBean(JobRepository.class);
 	}
 	
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public ModelAndView test() {
+		return new ModelAndView("test");
+	}
+	
 	@RequestMapping(value = "/jobs", method = RequestMethod.GET)
 	public ModelAndView jobs() {
-		List<Object[]> mainJobs = jobRepo.findCountPerMainJob();
-		List<Object[]> altJobs = jobRepo.findCountPerAltJob();
-		List<Object[]> allJobs = jobRepo.findCountPerJobAll();
+//		List<Object[]> mainJobs = jobRepo.findCountPerMainJob();
+//		List<Object[]> altJobs = jobRepo.findCountPerAltJob();
+//		List<Object[]> allJobs = jobRepo.findCountPerJobAll();
 		
-		return new ModelAndView("jobs")
-			.addObject("mainJobs", transformMainToMap(mainJobs))
-			.addObject("altJobs", transformAltToMap(altJobs))
-			.addObject("allJobs", transformAllToMap(allJobs));
+		return new ModelAndView("jobs");
+//			.addObject("mainJobs", transformMainToMap(mainJobs))
+//			.addObject("altJobs", transformAltToMap(altJobs))
+//			.addObject("allJobs", transformAllToMap(allJobs));
 	}
+	
+	@RequestMapping(value="/jobsData", method = RequestMethod.GET)
+	public @ResponseBody JsonChartData getJobChartData(@RequestParam(required=true) String jobsType) {
+		Map<String, Long> jobData;
+		
+		switch (jobsType) {
+		case "main":
+			List<Object[]> mainJobs = jobRepo.findCountPerMainJob();
+			jobData = transformMainToMap(mainJobs);
+			break;
+		case "alt":
+			List<Object[]> altJobs = jobRepo.findCountPerAltJob();
+			jobData = transformAltToMap(altJobs);
+			break;
+		case "all":
+			List<Object[]> allJobs = jobRepo.findCountPerJobAll();
+			jobData = transformAllToMap(allJobs);
+			break;
+		default:
+			return null;
+		}
+		
+		JsonChartData jsonData = new JsonChartData();
+		jsonData.setJobStatsData(jobData);
+		return jsonData;
+	}
+	
 
 	private Map<String, Long> transformMainToMap(List<Object[]> distribution) {
 		Map<String, Long> res = new HashMap<String, Long>(distribution.size()) {

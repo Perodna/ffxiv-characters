@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.pandore.ffxiv.characters.configuration.DataInit;
 import com.pandore.ffxiv.characters.persist.config.CharacterRepository;
@@ -12,8 +13,10 @@ import com.pandore.ffxiv.characters.persist.config.JobInfoRepository;
 import com.pandore.ffxiv.characters.persist.config.JobRepository;
 import com.pandore.ffxiv.characters.persist.config.RoleRepository;
 import com.pandore.ffxiv.characters.persist.entity.XIVCharacter;
+import com.pandore.ffxiv.characters.persist.entity.XIVJobInfo;
 
 @SpringBootApplication
+@EnableScheduling
 public class Application {
 	
 	public static void main(String[] args) {
@@ -25,6 +28,13 @@ public class Application {
 		JobInfoRepository jobInfoRepo = context.getBean(JobInfoRepository.class);
 		
 		DataInit.init(roleRepo, jobRepo, charRepo, jobInfoRepo);
+		
+		
+		
+//		DataRetriever dataRetriever = context.getBean(DataRetriever.class);
+//		dataRetriever.saveFreeCompany("9237023573225275675"); // The Sanctum
+//		dataRetriever.saveInwilis();
+		
 
         // fetch all Characters
         Iterable<XIVCharacter> characters = charRepo.findAll();
@@ -41,10 +51,13 @@ public class Application {
         System.out.println("--------------------------------");
         System.out.println(character);
         System.out.println();
+        
+        XIVJobInfo jobInfo = jobInfoRepo.findFirstByCharacterAndJobOrderByDateDesc(character, jobRepo.findByShortName("SCH").get(0));
+        System.out.println(jobInfo);
 
         // fetch Characters by last name
-        List<XIVCharacter> vivis = charRepo.findByFirstName("Vivi");
-        System.out.println("Character found with findByFirstName('Vivi'):");
+        List<XIVCharacter> vivis = charRepo.findByFirstNameLikeIgnoreCase("%Vivi%");
+        System.out.println("Characters found with findByFirstNameLikeIgnoreCase('%Vivi%'):");
         System.out.println("--------------------------------------------");
         for (XIVCharacter v : vivis) {
             System.out.println(v);

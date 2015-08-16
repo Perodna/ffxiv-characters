@@ -1,26 +1,69 @@
-function drawJobsPie(rows, title, div) {
-	var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Job');
-    data.addColumn('number', 'Characters');
-    data.addRows(rows);
+//function drawJobsPie(rows, title, div) {
+//	var data = new google.visualization.DataTable();
+//    data.addColumn('string', 'Job');
+//    data.addColumn('number', 'Characters');
+//    data.addRows(rows);
+//    var options = {
+//    	    'title': title,
+//    	    'pieHole': 0.5, // make it a donut
+//    	    'height': 400,
+//    	    'width': '100%',
+//    	    'chartArea': { width:'75%',height:'75%'},
+//	  	    'colors': [
+//		  	    getJobColorCode('PLD'),
+//				getJobColorCode('WAR'),
+//				getJobColorCode('WHM'),
+//				getJobColorCode('SCH'),
+//				getJobColorCode('MNK'),
+//				getJobColorCode('DRG'),
+//				getJobColorCode('NIN'),
+//				getJobColorCode('BRD'),
+//				getJobColorCode('BLM'),
+//				getJobColorCode('SMN')
+//			]
+//   	};
+//    var chart = new google.visualization.PieChart(document.getElementById(div));
+//    chart.draw(data, options);
+//};
+
+
+function getPieJobColors(data) {
+	var jobColors = {
+		'PLD': '#1B98E0',
+		'WAR': '#247BA0',
+		'DRK': '#006494',
+		'WHM': '#049016',
+		'SCH': '#41B338',
+		'AST': '#7FD75B',
+		'MNK': '#97071B',
+		'DRG': '#A82721',
+		'NIN': '#B94728',
+		'BRD': '#CB682E',
+		'MCH': '#DC8835',
+		'BLM': '#EDA83B',
+		'SMN': '#FFC942'
+	};
+	
+	var slicesColor = {};
+
+	for( var i=0; i < data.getNumberOfRows(); i++) {
+		// label is in the first column of each row
+		slicesColor[i] = {color: jobColors[data.getValue(i, 0)] };
+	}
+	
+	return slicesColor;
+}
+
+function drawJobsPie(jsonData, title, div) {	
+	var data = new google.visualization.DataTable(jsonData);
+	
     var options = {
     	    'title': title,
     	    'pieHole': 0.5, // make it a donut
     	    'height': 400,
     	    'width': '100%',
     	    'chartArea': { width:'75%',height:'75%'},
-	  	    'colors': [
-		  	    getJobColorCode('PLD'),
-				getJobColorCode('WAR'),
-				getJobColorCode('WHM'),
-				getJobColorCode('SCH'),
-				getJobColorCode('MNK'),
-				getJobColorCode('DRG'),
-				getJobColorCode('NIN'),
-				getJobColorCode('BRD'),
-				getJobColorCode('BLM'),
-				getJobColorCode('SMN')
-			]
+    	    'slices': getPieJobColors(data)
    	};
     var chart = new google.visualization.PieChart(document.getElementById(div));
     chart.draw(data, options);
@@ -103,6 +146,7 @@ function getSeriesForLineChartData(dataTable) {
 	
 	return series;
 }
+
 
 function getJobColorCode(jobName) {
 	switch (jobName) {

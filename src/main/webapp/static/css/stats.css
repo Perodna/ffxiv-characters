@@ -36,32 +36,41 @@
 
 /* Jobs badges */
 .badge-PLD {
-	background-color: #28459D;
+	background-color: #1B98E0;
 }
 .badge-WAR {
-	background-color: #425DAE;
+	background-color: #247BA0;
+}
+.badge-DRK {
+	background-color: #006494;
 }
 .badge-WHM {
-	background-color: #116416;
+	background-color: #049016;
 }
 .badge-SCH {
-	background-color: #54A759;
+	background-color: #41B338;
+}
+.badge-AST {
+	background-color: #7FD75B;
 }
 .badge-MNK {
-	background-color: #E93325;
+	background-color: #97071B;
 }
 .badge-DRG {
-	background-color: #FF594C;
+	background-color: #A82721;
 }
 .badge-NIN {
-	background-color: #FF978F;
+	background-color: #B94728;
 }
 .badge-BRD {
-	background-color: #FF814C;
+	background-color: #CB682E;
+}
+.badge-MCH {
+	background-color: #DC8835;
 }
 .badge-BLM {
-	background-color: #E98925;
+	background-color: #EDA83B;
 }
 .badge-SMN {
-	background-color: #FFA84C;
+	background-color: #FFC942;
 }

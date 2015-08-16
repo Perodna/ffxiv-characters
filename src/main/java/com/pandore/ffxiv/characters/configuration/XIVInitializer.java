@@ -18,7 +18,7 @@ public class XIVInitializer extends SpringBootServletInitializer  {
 	@Override
     public void onStartup(ServletContext container) throws ServletException {
  
-    	System.out.println("########## TEST !!!!!!!!!!!");
+    	System.out.println("########## STARTUP !!!!!!!!!!!");
     	
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
         ctx.register(XIVConfiguration.class);

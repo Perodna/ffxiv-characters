@@ -13,6 +13,9 @@ import com.pandore.ffxiv.characters.persist.entity.XIVJobInfo;
 
 public class JsonChartData {
 	
+	
+	//--- Sub-classes ---------------------------------------------------------
+	
 	public class Column {
 		private String id;
 		private String label;
@@ -46,16 +49,16 @@ public class JsonChartData {
 	}
 	
 	public class Cell {
-		String v; // cell value
+		Object v; // cell value
 		String f; // version of value formatted for display
-		public Cell(String v, String f) {
+		public Cell(Object v, String f) {
 			this.v = v;
 			this.f = f;
 		}
-		public String getV() {
+		public Object getV() {
 			return v;
 		}
-		public void setV(String v) {
+		public void setV(Object v) {
 			this.v = v;
 		}
 		public String getF() {
@@ -65,6 +68,9 @@ public class JsonChartData {
 			this.f = f;
 		}
 	}
+	
+	
+	//--- JsonCharData class --------------------------------------------------
 	
 	
 	private Column[] cols;
@@ -89,42 +95,45 @@ public class JsonChartData {
 	protected String formatDate(Date date) {
 		return "Date(" + date.getTime() + ")";
 	}
+	
+	public void setJobStatsData(Map<String, Long> jobsStats) {
+		// Set Columns
+		Column[] columns = new Column[2];
+		
+		columns[0] = new Column("job", "Job", "string");
+		columns[1] = new Column("popularity", "Popularity", "number");
+		
+		
+		// Set rows, ordered by job
+		TreeSet<String> sortedJobs = new TreeSet<String>(new Comparator<String>() {
+			@Override
+			public int compare(String j1, String j2) {
+				return JsonDataUtil.getNaturalJobOrdering(j1) - JsonDataUtil.getNaturalJobOrdering(j2);
+			}
+		});
+		sortedJobs.addAll(jobsStats.keySet());
+		
+		Row[] rows = new Row[jobsStats.size()];
+		int i= 0;
+		for (String job : sortedJobs) {
+			Cell[] cells = new Cell[columns.length];
+			cells[0] = new Cell(job, job);
+			cells[1] = new Cell(jobsStats.get(job), null);
+			rows[i] = new Row(cells);
+			i++;
+		}
+		
+		this.cols = columns;
+		this.rows = rows;
+	}
 
-
-	public void setJobDataForLineChart(Map<XIVJob, List<XIVJobInfo>> allJobsInfos) {
+	public void setJobInfoHistoryData(Map<XIVJob, List<XIVJobInfo>> allJobsInfos) {
 		Map<Date, Cell[]> dataByDate = new HashMap<Date, Cell[]>();
 		
 		TreeSet<XIVJob> sortedJobs = new TreeSet<XIVJob>(new Comparator<XIVJob>() {
 			@Override
 			public int compare(XIVJob j1, XIVJob j2) {
-				return getNaturalOrdering(j1) - getNaturalOrdering(j2);
-			}
-			
-			private int getNaturalOrdering(XIVJob job) {
-				switch (job.getShortName().toUpperCase()) {
-				case "PLD":
-					return 0;
-				case "WAR":
-					return 1;
-				case "WHM":
-					return 2;
-				case "SCH":
-					return 3;
-				case "MNK":
-					return 4;
-				case "DRG":
-					return 5;
-				case "NIN":
-					return 6;
-				case "BRD":
-					return 7;
-				case "BLM":
-					return 8;
-				case "SMN":
-					return 9;
-				default:
-					return -1;
-				}
+				return JsonDataUtil.getNaturalJobOrdering(j1) - JsonDataUtil.getNaturalJobOrdering(j2);
 			}
 		});
 		
@@ -187,4 +196,6 @@ public class JsonChartData {
 		this.cols = columns;
 		this.rows = rows;
 	}
+	
+	
 }

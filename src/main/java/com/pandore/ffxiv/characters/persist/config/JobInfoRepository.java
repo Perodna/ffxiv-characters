@@ -13,4 +13,6 @@ import com.pandore.ffxiv.characters.persist.entity.XIVJobInfo;
 public interface JobInfoRepository extends PagingAndSortingRepository<XIVJobInfo, Long> {
 
 	List<XIVJobInfo> findByCharacterAndJobOrderByDateAsc(@Param("character") XIVCharacter character, @Param("job") XIVJob job);
+	
+	XIVJobInfo findFirstByCharacterAndJobOrderByDateDesc(@Param("character") XIVCharacter character, @Param("job") XIVJob job);
 }

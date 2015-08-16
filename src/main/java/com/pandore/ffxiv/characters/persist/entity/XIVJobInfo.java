@@ -111,4 +111,14 @@ public class XIVJobInfo {
 	public void setLevel(Integer level) {
 		this.level = level;
 	}
+
+	@Override
+	public String toString() {
+		return "XIVJobInfo [id=" + id + ", character=" + character.getFullName() + ", job="
+				+ job + ", date=" + date + ", iLevel=" + iLevel + ", level="
+				+ level + "]";
+	}
+	
+	
+	
 }

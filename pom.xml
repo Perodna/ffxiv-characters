@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>inwilis</groupId>
+	<groupId>com.pandore.ffxiv</groupId>
 	<artifactId>ffxiv-characters</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
@@ -24,6 +24,9 @@
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		
+		<!-- Lodestone parser -->
+		<xiv-lodestone-parser.version>0.0.1-SNAPSHOT</xiv-lodestone-parser.version>
 
 		<!-- Spring -->
 		<spring-framework.version>4.1.4.RELEASE</spring-framework.version>
@@ -45,6 +48,13 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.pandore.ffxiv</groupId>
+			<artifactId>xiv-lodestone-parser</artifactId>
+			<version>${xiv-lodestone-parser.version}</version>
+		</dependency>
+	
+	
 		<!-- Spring boot -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -108,6 +118,12 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>${jackson.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
 		</dependency>
 	</dependencies>
 </project>

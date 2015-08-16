@@ -25,7 +25,7 @@
 <script type="text/javascript">
 
   // Load the Visualization API and the piechart package.
-  google.load('visualization', '1.0', {'packages':['corechart']});
+  google.load('visualization', '1', {'packages':['corechart']});
 
   // Set a callback to run when the Google Visualization API is loaded.
   google.setOnLoadCallback(drawChart);
@@ -36,49 +36,28 @@
   function drawChart() {
 
     // Main jobs
-    var mainJobsRows = [
-		['PLD', ${mainJobs["PLD"]}],
-		['WAR', ${mainJobs["WAR"]}],
-		['WHM', ${mainJobs["WHM"]}],
-		['SCH', ${mainJobs["SCH"]}],
-		['MNK', ${mainJobs["MNK"]}],
-		['DRG', ${mainJobs["DRG"]}],
-		['NIN', ${mainJobs["NIN"]}],
-		['BRD', ${mainJobs["BRD"]}],
-		['BLM', ${mainJobs["BLM"]}],
-		['SMN', ${mainJobs["SMN"]}]
-    ];
-    drawJobsPie(mainJobsRows, 'Main jobs distribution', 'main_jobs');
+    var jsonData = $.ajax({
+		url : "jobsData?jobsType=main",
+		dataType : "json",
+		async : false
+	}).responseText;
+    drawJobsPie(jsonData, 'Main jobs distribution', 'main_jobs');
 
  	// Alt jobs
-    var altJobsRows = [
-		['PLD', ${altJobs["PLD"]}],
-		['WAR', ${altJobs["WAR"]}],
-		['WHM', ${altJobs["WHM"]}],
-		['SCH', ${altJobs["SCH"]}],
-		['MNK', ${altJobs["MNK"]}],
-		['DRG', ${altJobs["DRG"]}],
-		['NIN', ${altJobs["NIN"]}],
-		['BRD', ${altJobs["BRD"]}],
-		['BLM', ${altJobs["BLM"]}],
-		['SMN', ${altJobs["SMN"]}]
-    ];
-    drawJobsPie(altJobsRows, 'Alt jobs distribution', 'alt_jobs');
+    var jsonData = $.ajax({
+		url : "jobsData?jobsType=alt",
+		dataType : "json",
+		async : false
+	}).responseText;
+    drawJobsPie(jsonData, 'Alt jobs distribution', 'alt_jobs');
     
  	// All jobs
-    var allJobsRows = [
-		['PLD', ${allJobs["PLD"]}],
-		['WAR', ${allJobs["WAR"]}],
-		['WHM', ${allJobs["WHM"]}],
-		['SCH', ${allJobs["SCH"]}],
-		['MNK', ${allJobs["MNK"]}],
-		['DRG', ${allJobs["DRG"]}],
-		['NIN', ${allJobs["NIN"]}],
-		['BRD', ${allJobs["BRD"]}],
-		['BLM', ${allJobs["BLM"]}],
-		['SMN', ${allJobs["SMN"]}]
-    ];
-    drawJobsPie(allJobsRows, 'All jobs distribution (mains & alts)', 'all_jobs');
+    var jsonData = $.ajax({
+		url : "jobsData?jobsType=all",
+		dataType : "json",
+		async : false
+	}).responseText;
+    drawJobsPie(jsonData, 'All jobs distribution (mains & alts)', 'all_jobs');
   }
 </script>
 

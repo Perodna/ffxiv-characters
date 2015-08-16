@@ -89,7 +89,7 @@ public class CharacterController implements BeanFactoryAware {
 		}
 		
 		JsonChartData jsonData = new JsonChartData();
-		jsonData.setJobDataForLineChart(allJobsInfos);
+		jsonData.setJobInfoHistoryData(allJobsInfos);
 		return jsonData;
 	}
 	

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -25,6 +26,9 @@ public class XIVCharacter {
 	@GeneratedValue(generator = "generator")
 	@Column(name = "id", nullable = false)
 	private Long id;
+	
+	@Column(name = "lodestone_id", nullable = false, unique = true)
+	private String lodestoneId;
 
 	@Column(name = "firstname", nullable = false)
 	private String firstName;
@@ -36,7 +40,7 @@ public class XIVCharacter {
 	@JoinColumn(name="main_job_id")
 	private XIVJob mainJob;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 		name = "alt_jobs",
 		joinColumns = @JoinColumn(name = "character_id"),
@@ -53,13 +57,19 @@ public class XIVCharacter {
 		this.mainJob = mainJob;
 	}
 	
-	
-	
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getLodestoneId() {
+		return lodestoneId;
+	}
+
+	public void setLodestoneId(String lodestoneId) {
+		this.lodestoneId = lodestoneId;
 	}
 
 	public String getFirstName() {
@@ -97,13 +107,22 @@ public class XIVCharacter {
 	}
 	
 	public void addAltJob(XIVJob job) {
-		this.altJobs.add(job);
+		if (!altJobs.contains(job)) {
+			this.altJobs.add(job);
+		}
 	}
 	
 	public void addAltJobs(XIVJob... jobs) {
 		for (XIVJob job : jobs) {
-			this.altJobs.add(job);
+			addAltJob(job);
 		}
+	}
+	
+	public boolean hasJob(XIVJob job) {
+		if (mainJob.equals(job)) {
+			return true;
+		}
+		return altJobs.contains(job);
 	}
 
 	@Override

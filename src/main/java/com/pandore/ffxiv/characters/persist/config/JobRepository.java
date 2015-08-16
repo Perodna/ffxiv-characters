@@ -14,17 +14,19 @@ public interface JobRepository extends PagingAndSortingRepository<XIVJob, Long> 
 	List<XIVJob> findByName(@Param("name") String name);
 	List<XIVJob> findByShortName(@Param("shortname") String shortName);
 	
-	@Query("select c.mainJob, count(c.id) from XIVCharacter c group by c.mainJob.id")
+	@Query("select c.mainJob, count(c.id) from XIVCharacter c, XIVJob j where c.mainJob = j and j.isClass = false group by c.mainJob.id")
 	List<Object[]> findCountPerMainJob();
 	
-	@Query(value = "select j.shortname, count(aj.character_id) from job j, alt_jobs aj where j.id = aj.job_id group by aj.job_id", nativeQuery = true)
+	@Query(value = "select j.shortname, count(aj.character_id) from job j, alt_jobs aj "
+			+ "where j.id = aj.job_id and j.is_class = false group by aj.job_id",
+			nativeQuery = true)
 	List<Object[]> findCountPerAltJob();
 	
 	@Query(value = "select jobs.shortname, sum(jobs.count) "
 			+ "from "
-			+ "(select j.shortname, count(c.id) count from character c, job j where c.main_job_id = j.id group by c.main_job_id "
+			+ "(select j.shortname, count(c.id) count from character c, job j where c.main_job_id = j.id and j.is_class = false group by c.main_job_id "
 			+ "union all "
-			+ "select j.shortname, count(aj.character_id) count from job j, alt_jobs aj where j.id = aj.job_id group by aj.job_id) jobs "
+			+ "select j.shortname, count(aj.character_id) count from job j, alt_jobs aj where j.id = aj.job_id and j.is_class = false group by aj.job_id) jobs "
 			+ "group by jobs.shortname", 
 		nativeQuery = true)
 	List<Object[]> findCountPerJobAll();
