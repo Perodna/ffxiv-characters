@@ -1,6 +1,5 @@
 package com.pandore.ffxiv.characters.web.controller;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
@@ -129,7 +128,7 @@ public class JobStatsController implements BeanFactoryAware {
 		};
 		
 		for (Object[] line : distribution) {
-			res.put(((String) line[0]), Long.valueOf(((BigDecimal) line[1]).longValue()));
+			res.put(((String) line[0]), Long.valueOf(((BigInteger) line[1]).longValue()));
 		}
 		return res;
 	}

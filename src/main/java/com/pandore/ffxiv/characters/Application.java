@@ -13,7 +13,7 @@ import com.pandore.ffxiv.characters.persist.config.JobInfoRepository;
 import com.pandore.ffxiv.characters.persist.config.JobRepository;
 import com.pandore.ffxiv.characters.persist.config.RoleRepository;
 import com.pandore.ffxiv.characters.persist.entity.XIVCharacter;
-import com.pandore.ffxiv.characters.persist.entity.XIVJobInfo;
+import com.pandore.ffxiv.characters.persist.entity.XIVJobInfoHistory;
 
 @SpringBootApplication
 @EnableScheduling
@@ -52,7 +52,7 @@ public class Application {
         System.out.println(character);
         System.out.println();
         
-        XIVJobInfo jobInfo = jobInfoRepo.findFirstByCharacterAndJobOrderByDateDesc(character, jobRepo.findByShortName("SCH").get(0));
+        XIVJobInfoHistory jobInfo = jobInfoRepo.findFirstByCharacterAndJobOrderByDateDesc(character, jobRepo.findByShortName("SCH").get(0));
         System.out.println(jobInfo);
 
         // fetch Characters by last name

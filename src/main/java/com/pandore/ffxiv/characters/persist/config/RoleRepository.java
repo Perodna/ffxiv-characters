@@ -17,21 +17,15 @@ public interface RoleRepository extends PagingAndSortingRepository<XIVRole, Long
 	@Query("select c.mainJob.role, count(c.id) from XIVCharacter c group by c.mainJob.role.id")
 	List<Object[]> findCountPerMainRole();
 	
-	@Query(value = "select r.name, count(aj.character_id) from job j, alt_jobs aj, role r "
-			+ "where j.id = aj.job_id and j.role_id = r.id "
+	@Query(value = "select r.name, count(cj.character_id) from job j, char_jobs cj, role r, character c "
+			+ "where j.id = cj.job_id and j.role_id = r.id "
+			+ "and c.id = cj.character_id and c.main_job_id <> cj.job_id "
 			+ "group by r.id", nativeQuery = true)
 	List<Object[]> findCountPerAltRole();
 	
-	@Query(value = "select roles.name, sum(roles.count) "
-			+ "from "
-			+ "(select r.name, count(r.id) count from character c, job j, role r "
-			+ "where c.main_job_id = j.id and j.role_id = r.id group by r.id "
-			+ "union all "
-			+ "select r.name, count(aj.character_id) from job j, alt_jobs aj, role r "
-			+ "where j.id = aj.job_id and j.role_id = r.id "
-			+ "group by aj.job_id"
-			+ ") roles "
-			+ "group by roles.name", 
-		nativeQuery = true)
+	@Query(value = "select r.name, count(cj.character_id) from job j, char_jobs cj, role r "
+			+ "where j.id = cj.job_id and j.role_id = r.id "
+			+ "group by r.id",
+			nativeQuery = true)
 	List<Object[]> findCountPerRoleAll();
 }

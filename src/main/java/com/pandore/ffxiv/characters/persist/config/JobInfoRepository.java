@@ -7,12 +7,12 @@ import org.springframework.data.repository.query.Param;
 
 import com.pandore.ffxiv.characters.persist.entity.XIVCharacter;
 import com.pandore.ffxiv.characters.persist.entity.XIVJob;
-import com.pandore.ffxiv.characters.persist.entity.XIVJobInfo;
+import com.pandore.ffxiv.characters.persist.entity.XIVJobInfoHistory;
 
 
-public interface JobInfoRepository extends PagingAndSortingRepository<XIVJobInfo, Long> {
+public interface JobInfoRepository extends PagingAndSortingRepository<XIVJobInfoHistory, Long> {
 
-	List<XIVJobInfo> findByCharacterAndJobOrderByDateAsc(@Param("character") XIVCharacter character, @Param("job") XIVJob job);
+	List<XIVJobInfoHistory> findByCharacterAndJobOrderByDateAsc(@Param("character") XIVCharacter character, @Param("job") XIVJob job);
 	
-	XIVJobInfo findFirstByCharacterAndJobOrderByDateDesc(@Param("character") XIVCharacter character, @Param("job") XIVJob job);
+	XIVJobInfoHistory findFirstByCharacterAndJobOrderByDateDesc(@Param("character") XIVCharacter character, @Param("job") XIVJob job);
 }

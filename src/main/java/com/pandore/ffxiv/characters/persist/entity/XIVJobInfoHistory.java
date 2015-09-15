@@ -13,8 +13,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "job_info")
-public class XIVJobInfo {
+@Table(name = "job_info_history")
+public class XIVJobInfoHistory {
 	
 	@Id
 	@GenericGenerator(name = "generator", strategy = "increment")
@@ -40,22 +40,22 @@ public class XIVJobInfo {
 	Integer level;
 	
 	
-	protected XIVJobInfo() {
+	protected XIVJobInfoHistory() {
 	}
 	
-	public XIVJobInfo(XIVCharacter character, XIVJob job) {
+	public XIVJobInfoHistory(XIVCharacter character, XIVJob job) {
 		this.character = character;
 		this.job = job;
 		this.date = new Date();
 	}
 	
-	public XIVJobInfo(XIVCharacter character, XIVJob job, Date date) {
+	public XIVJobInfoHistory(XIVCharacter character, XIVJob job, Date date) {
 		this.character = character;
 		this.job = job;
 		this.date = date;
 	}
 
-	public XIVJobInfo(XIVCharacter character, XIVJob job, Date date, Integer iLevel, Integer level) {
+	public XIVJobInfoHistory(XIVCharacter character, XIVJob job, Date date, Integer iLevel, Integer level) {
 		super();
 		this.character = character;
 		this.job = job;

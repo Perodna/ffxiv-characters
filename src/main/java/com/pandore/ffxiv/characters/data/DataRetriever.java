@@ -15,7 +15,7 @@ import com.pandore.ffxiv.characters.persist.config.JobInfoRepository;
 import com.pandore.ffxiv.characters.persist.config.JobRepository;
 import com.pandore.ffxiv.characters.persist.entity.XIVCharacter;
 import com.pandore.ffxiv.characters.persist.entity.XIVJob;
-import com.pandore.ffxiv.characters.persist.entity.XIVJobInfo;
+import com.pandore.ffxiv.characters.persist.entity.XIVJobInfoHistory;
 import com.pandore.ffxiv.lodestone.entity.LSCharacter;
 import com.pandore.ffxiv.lodestone.entity.LSFreeCompany;
 import com.pandore.ffxiv.lodestone.parser.LodestoneParser;
@@ -75,15 +75,15 @@ public class DataRetriever {
 			character = charRepo.save(character);
 		} else {
 			if (!character.hasJob(currentJob)) { // update list of character jobs
-				character.addAltJob(currentJob);
+				character.addJob(currentJob);
 				character = charRepo.save(character);
 			}
 		}
 		
 		// TODO save classes/jobs progression from list of classes on lodestone, once lodestone API provides the info 
 		
-		XIVJobInfo lodestoneInfo = new XIVJobInfo(character, currentJob, new Date(), lodestoneChar.getItemLevel(), lodestoneChar.getLevel());
-		XIVJobInfo databaseInfo = jobInfoRepo.findFirstByCharacterAndJobOrderByDateDesc(character, currentJob);
+		XIVJobInfoHistory lodestoneInfo = new XIVJobInfoHistory(character, currentJob, new Date(), lodestoneChar.getItemLevel(), lodestoneChar.getLevel());
+		XIVJobInfoHistory databaseInfo = jobInfoRepo.findFirstByCharacterAndJobOrderByDateDesc(character, currentJob);
 		
 		// Save job info from lodestone only if one of the following conditions is met:
 		// - there was no previous info for this job

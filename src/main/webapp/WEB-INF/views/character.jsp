@@ -91,7 +91,7 @@
 					<p>First name: ${c.firstName}</p>
 					<p>Last name: ${c.lastName}</p>
 					<p>Main job: <span class="badge badge-${c.mainJob.shortName}">${c.mainJob.shortName}</span> - iLevel: ${mainJobLevel} </p>
-					<p>Alt jobs: <c:forEach items="${c.altJobs}" var="j"><span class="badge badge-${j.shortName}">${j.shortName}</span>&nbsp;</c:forEach></p>
+					<p>Alt jobs: <c:forEach items="${c.jobs}" var="j"><c:if test="${j.id != c.mainJob.id}"><span class="badge badge-${j.shortName}">${j.shortName}</span>&nbsp;</c:if></c:forEach></p>
 					
 					<div>
 					<!-- Won't work for a character with a quote ' in his name -->

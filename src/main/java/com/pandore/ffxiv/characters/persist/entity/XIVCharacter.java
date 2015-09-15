@@ -42,11 +42,11 @@ public class XIVCharacter {
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
-		name = "alt_jobs",
+		name = "char_jobs",
 		joinColumns = @JoinColumn(name = "character_id"),
 		inverseJoinColumns = @JoinColumn(name = "job_id")
 	)
-	private List<XIVJob> altJobs = new ArrayList<XIVJob>(9);
+	private List<XIVJob> jobs = new ArrayList<XIVJob>(9);
 	
 	protected XIVCharacter() {
 	}
@@ -55,6 +55,7 @@ public class XIVCharacter {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.mainJob = mainJob;
+		this.addJob(mainJob);
 	}
 	
 	public Long getId() {
@@ -98,31 +99,28 @@ public class XIVCharacter {
 		this.mainJob = mainJob;
 	}
 
-	public List<XIVJob> getAltJobs() {
-		return altJobs;
+	public List<XIVJob> getJobs() {
+		return jobs;
 	}
 
-	public void setAltJobs(List<XIVJob> altJobs) {
-		this.altJobs = altJobs;
+	public void setJobs(List<XIVJob> jobs) {
+		this.jobs = jobs;
 	}
 	
-	public void addAltJob(XIVJob job) {
-		if (!altJobs.contains(job)) {
-			this.altJobs.add(job);
+	public void addJob(XIVJob job) {
+		if (!jobs.contains(job)) {
+			this.jobs.add(job);
 		}
 	}
 	
-	public void addAltJobs(XIVJob... jobs) {
+	public void addJobs(XIVJob... jobs) {
 		for (XIVJob job : jobs) {
-			addAltJob(job);
+			addJob(job);
 		}
 	}
 	
 	public boolean hasJob(XIVJob job) {
-		if (mainJob.equals(job)) {
-			return true;
-		}
-		return altJobs.contains(job);
+		return jobs.contains(job);
 	}
 
 	@Override

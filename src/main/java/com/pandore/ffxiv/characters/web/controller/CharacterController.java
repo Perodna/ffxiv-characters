@@ -20,7 +20,7 @@ import com.pandore.ffxiv.characters.persist.config.CharacterRepository;
 import com.pandore.ffxiv.characters.persist.config.JobInfoRepository;
 import com.pandore.ffxiv.characters.persist.entity.XIVCharacter;
 import com.pandore.ffxiv.characters.persist.entity.XIVJob;
-import com.pandore.ffxiv.characters.persist.entity.XIVJobInfo;
+import com.pandore.ffxiv.characters.persist.entity.XIVJobInfoHistory;
 
 @Controller
 public class CharacterController implements BeanFactoryAware {
@@ -44,23 +44,7 @@ public class CharacterController implements BeanFactoryAware {
 	@RequestMapping(value = "/character", method = RequestMethod.GET)
 	public ModelAndView character(@RequestParam(required=true) Long chardId) {
 		XIVCharacter character= charRepo.findOne(chardId);
-		String mainJobLevel = "unknown";
-		Map<XIVJob, List<XIVJobInfo>> allJobsInfos = new HashMap<XIVJob, List<XIVJobInfo>>(character.getAltJobs().size() + 1);
-		
-		// Get info of main job
-		List<XIVJobInfo> mainJobInfos = jobInfoRepo.findByCharacterAndJobOrderByDateAsc(character, character.getMainJob());
-		if (mainJobInfos != null && !mainJobInfos.isEmpty()) {
-			mainJobLevel = mainJobInfos.get(mainJobInfos.size() - 1).getiLevel().toString();
-			allJobsInfos.put(character.getMainJob(), mainJobInfos);
-		}
-		
-		// Get alt jobs info
-		for (int i = 0; i < character.getAltJobs().size(); i++) {
-			List<XIVJobInfo> altJobInfos = jobInfoRepo.findByCharacterAndJobOrderByDateAsc(character, character.getAltJobs().get(i));
-			if (allJobsInfos != null && !altJobInfos.isEmpty()) {
-				allJobsInfos.put(character.getAltJobs().get(i), altJobInfos);
-			}
-		}
+		Integer mainJobLevel = jobInfoRepo.findFirstByCharacterAndJobOrderByDateDesc(character, character.getMainJob()).getiLevel();
 		
 		return new ModelAndView("character")
 			.addObject("c", character)
@@ -72,19 +56,13 @@ public class CharacterController implements BeanFactoryAware {
 	public @ResponseBody JsonChartData getJobChartData(@RequestParam(required=true) Long charId) {
 		XIVCharacter character= charRepo.findOne(charId);
 		
-		Map<XIVJob, List<XIVJobInfo>> allJobsInfos = new HashMap<XIVJob, List<XIVJobInfo>>(character.getAltJobs().size() + 1);
+		Map<XIVJob, List<XIVJobInfoHistory>> allJobsInfos = new HashMap<XIVJob, List<XIVJobInfoHistory>>(character.getJobs().size() + 1);
 		
-		// Get info of main job
-		List<XIVJobInfo> mainJobInfos = jobInfoRepo.findByCharacterAndJobOrderByDateAsc(character, character.getMainJob());
-		if (mainJobInfos != null && !mainJobInfos.isEmpty()) {
-			allJobsInfos.put(character.getMainJob(), mainJobInfos);
-		}
-		
-		// Get alt jobs info
-		for (int i = 0; i < character.getAltJobs().size(); i++) {
-			List<XIVJobInfo> altJobInfos = jobInfoRepo.findByCharacterAndJobOrderByDateAsc(character, character.getAltJobs().get(i));
-			if (allJobsInfos != null && !altJobInfos.isEmpty()) {
-				allJobsInfos.put(character.getAltJobs().get(i), altJobInfos);
+		// Get all jobs info
+		for (XIVJob job : character.getJobs()) {
+			List<XIVJobInfoHistory> jobHistories = jobInfoRepo.findByCharacterAndJobOrderByDateAsc(character, job);
+			if (allJobsInfos != null && !jobHistories.isEmpty()) {
+				allJobsInfos.put(job, jobHistories);
 			}
 		}
 		

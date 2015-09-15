@@ -9,7 +9,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.pandore.ffxiv.characters.persist.entity.XIVJob;
-import com.pandore.ffxiv.characters.persist.entity.XIVJobInfo;
+import com.pandore.ffxiv.characters.persist.entity.XIVJobInfoHistory;
 
 public class JsonChartData {
 	
@@ -127,7 +127,7 @@ public class JsonChartData {
 		this.rows = rows;
 	}
 
-	public void setJobInfoHistoryData(Map<XIVJob, List<XIVJobInfo>> allJobsInfos) {
+	public void setJobInfoHistoryData(Map<XIVJob, List<XIVJobInfoHistory>> allJobsInfos) {
 		Map<Date, Cell[]> dataByDate = new HashMap<Date, Cell[]>();
 		
 		TreeSet<XIVJob> sortedJobs = new TreeSet<XIVJob>(new Comparator<XIVJob>() {
@@ -149,9 +149,9 @@ public class JsonChartData {
 		for (XIVJob job : sortedJobs) {
 			columns[jobColumn] = new Column(job.getShortName(), job.getName(), "number");
 			
-			List<XIVJobInfo> jobInfoList = allJobsInfos.get(job);
+			List<XIVJobInfoHistory> jobInfoList = allJobsInfos.get(job);
 			
-			for (XIVJobInfo jobInfo : jobInfoList) {
+			for (XIVJobInfoHistory jobInfo : jobInfoList) {
 				Date date = jobInfo.getDate();
 				if (!dataByDate.containsKey(date)) {
 					// Initialize row for this date

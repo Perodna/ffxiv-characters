@@ -11,7 +11,7 @@ import com.pandore.ffxiv.characters.persist.config.JobRepository;
 import com.pandore.ffxiv.characters.persist.config.RoleRepository;
 import com.pandore.ffxiv.characters.persist.entity.XIVCharacter;
 import com.pandore.ffxiv.characters.persist.entity.XIVJob;
-import com.pandore.ffxiv.characters.persist.entity.XIVJobInfo;
+import com.pandore.ffxiv.characters.persist.entity.XIVJobInfoHistory;
 import com.pandore.ffxiv.characters.persist.entity.XIVRole;
 
 public class DataInit {
@@ -84,7 +84,8 @@ public class DataInit {
 		
 		
 		// save some characters
-		/*saveNewChar(charRepo, jobInfoRepo, "Vivishu", "Vishu", sch, whm, blm, smn, war, mnk);
+		/*
+		saveNewChar(charRepo, jobInfoRepo, "Vivishu", "Vishu", sch, whm, blm, smn, war, mnk);
 		saveNewChar(charRepo, jobInfoRepo, "Myobi", "Yui", whm, pld, smn);
         saveNewChar(charRepo, jobInfoRepo, "Itani", "Valkyrie", brd, whm);
         saveNewChar(charRepo, jobInfoRepo, "Reynhart", "Kristensen", pld, drg, war);
@@ -132,8 +133,8 @@ public class DataInit {
         saveNewChar(charRepo, jobInfoRepo, "Seyrin", "Dunedain", nin, brd);
         saveNewChar(charRepo, jobInfoRepo, "Sora", "Ryuji", drg, war);
         saveNewChar(charRepo, jobInfoRepo, "Squall'", "Alexander", pld, drg, sch);
-        saveNewChar(charRepo, jobInfoRepo, "Tivice", "Conowell", pld, mnk);*/
-
+        saveNewChar(charRepo, jobInfoRepo, "Tivice", "Conowell", pld, mnk);
+		*/
 	}
 	
 	public static void initJobs(RoleRepository roleRepo, JobRepository jobRepo) {
@@ -143,7 +144,7 @@ public class DataInit {
 	private static void saveNewChar(CharacterRepository charRepo, JobInfoRepository jobInfoRepo, String firstName, String lastName, XIVJob main, XIVJob... alts) {
 		XIVCharacter character = new XIVCharacter(firstName, lastName, main);
 		character.setLodestoneId("" + lodestoneId++);
-		character.addAltJobs(alts);
+		character.addJobs(alts);
 		charRepo.save(character);
 		
 		if (generateRandomJobInfo) {
@@ -157,7 +158,7 @@ public class DataInit {
 	private static void generateJobInfo(XIVCharacter character, XIVJob job, JobInfoRepository jobInfoRepo) {
 		System.out.println("Generating random job info for " + character.getFullName() + " - " + job.getShortName());
 		
-		List<XIVJobInfo> infos = new ArrayList<XIVJobInfo>();
+		List<XIVJobInfoHistory> infos = new ArrayList<XIVJobInfoHistory>();
 		
 		Random rng = new Random();
 		
@@ -172,16 +173,16 @@ public class DataInit {
 		Integer level = 50; // initial level
 		Integer iLevel = 70; // initial iLevel
 		
-		infos.add(new XIVJobInfo(character, job, cal.getTime(), iLevel, level));
+		infos.add(new XIVJobInfoHistory(character, job, cal.getTime(), iLevel, level));
 		
 		for (int i = 0; i < 15; i++) {
 			cal.add(Calendar.DATE, rng.nextInt(20));
 			iLevel += rng.nextInt(5);
 			if (iLevel > 130) { // max level 130
-				infos.add(new XIVJobInfo(character, job, cal.getTime(), 130, level));
+				infos.add(new XIVJobInfoHistory(character, job, cal.getTime(), 130, level));
 				break;
 			}
-			infos.add(new XIVJobInfo(character, job, cal.getTime(), iLevel, level));
+			infos.add(new XIVJobInfoHistory(character, job, cal.getTime(), iLevel, level));
 		}
 		
 		jobInfoRepo.save(infos);
