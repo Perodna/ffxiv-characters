@@ -1,13 +1,11 @@
 package com.pandore.ffxiv.characters.web.controller;
 
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,16 +14,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pandore.ffxiv.characters.charts.JsonChartData;
-import com.pandore.ffxiv.characters.persist.config.JobRepository;
-import com.pandore.ffxiv.characters.persist.entity.XIVJob;
+import com.pandore.ffxiv.characters.persist.service.JobService;
 
 @Controller
 public class JobStatsController implements BeanFactoryAware {
-	JobRepository jobRepo;
+	
+	@Autowired
+	private JobService jobService;
 	
 	@Override
 	public void setBeanFactory(BeanFactory context) throws BeansException {
-		jobRepo = context.getBean(JobRepository.class);
+		// Nothing to do
 	}
 	
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
@@ -43,17 +42,14 @@ public class JobStatsController implements BeanFactoryAware {
 		Map<String, Long> jobData;
 		
 		switch (jobsType) {
-		case "main":
-			List<Object[]> mainJobs = jobRepo.findCountPerMainJob();
-			jobData = transformMainToMap(mainJobs);
+		case "main": 
+			jobData = jobService.findCountPerMainJob();
 			break;
 		case "alt":
-			List<Object[]> altJobs = jobRepo.findCountPerAltJob();
-			jobData = transformAltToMap(altJobs);
+			jobData = jobService.findCountPerAltJob();
 			break;
 		case "all":
-			List<Object[]> allJobs = jobRepo.findCountPerJobAll();
-			jobData = transformAllToMap(allJobs);
+			jobData = jobService.findCountPerJobAll();
 			break;
 		default:
 			return null;
@@ -65,64 +61,5 @@ public class JobStatsController implements BeanFactoryAware {
 	}
 	
 
-	private Map<String, Long> transformMainToMap(List<Object[]> distribution) {
-		Map<String, Long> res = new HashMap<String, Long>(distribution.size()) {
-			private static final long serialVersionUID = 4018418051779615666L;
-
-			@Override
-			public Long get(Object key) {
-				if (containsKey(key)) {
-					return super.get(key);
-				} else {
-					return Long.valueOf(0);
-				}
-			}
-		};
-		
-		for (Object[] line : distribution) {
-			res.put(((XIVJob) line[0]).getShortName(), (Long) line[1]);
-//			System.out.println(((XIVJob) line[0]).getShortName() +  " - " + (Long) line[1]);
-		}
-		return res;
-	}
 	
-	private Map<String, Long> transformAltToMap(List<Object[]> distribution) {
-		Map<String, Long> res = new HashMap<String, Long>(distribution.size()) {
-			private static final long serialVersionUID = 1977258208549043611L;
-
-			@Override
-			public Long get(Object key) {
-				if (containsKey(key)) {
-					return super.get(key);
-				} else {
-					return Long.valueOf(0);
-				}
-			}
-		};
-		
-		for (Object[] line : distribution) {
-			res.put(((String) line[0]), Long.valueOf(((BigInteger) line[1]).longValue()));
-		}
-		return res;
-	}
-	
-	private Map<String, Long> transformAllToMap(List<Object[]> distribution) {
-		Map<String, Long> res = new HashMap<String, Long>(distribution.size()) {
-			private static final long serialVersionUID = -5590192955163564062L;
-
-			@Override
-			public Long get(Object key) {
-				if (containsKey(key)) {
-					return super.get(key);
-				} else {
-					return Long.valueOf(0);
-				}
-			}
-		};
-		
-		for (Object[] line : distribution) {
-			res.put(((String) line[0]), Long.valueOf(((BigInteger) line[1]).longValue()));
-		}
-		return res;
-	}
 }

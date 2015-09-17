@@ -8,9 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 import com.pandore.ffxiv.characters.persist.entity.XIVCharacter;
 
-//@RepositoryRestResource(collectionResourceRel="characters", path="characters")
 public interface CharacterRepository extends PagingAndSortingRepository<XIVCharacter, Long> {
 	
+	List<XIVCharacter> findAllByOrderByFirstNameAscLastNameAsc();
 	List<XIVCharacter> findByFirstNameLikeIgnoreCase(@Param("firstName") String firstName);
 	List<XIVCharacter> findByLastNameLikeIgnoreCase(@Param("lastName") String lastName);
 	List<XIVCharacter> findByFirstNameAndLastName(@Param("firstName") String firstName, @Param("lastName") String lastName);

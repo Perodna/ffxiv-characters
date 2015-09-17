@@ -8,10 +8,8 @@ import org.springframework.data.repository.query.Param;
 
 import com.pandore.ffxiv.characters.persist.entity.XIVJob;
 
-//@RepositoryRestResource(collectionResourceRel="jobs", path="jobs")
 public interface JobRepository extends PagingAndSortingRepository<XIVJob, Long> {
-
-	List<XIVJob> findByName(@Param("name") String name);
+	
 	List<XIVJob> findByShortName(@Param("shortname") String shortName);
 	
 	@Query("select c.mainJob, count(c.id) from XIVCharacter c, XIVJob j where c.mainJob = j and j.isClass = false group by c.mainJob.id")
@@ -28,5 +26,4 @@ public interface JobRepository extends PagingAndSortingRepository<XIVJob, Long> 
 			+ "where j.id = cj.job_id and j.is_class = false group by cj.job_id",
 			nativeQuery = true)
 	List<Object[]> findCountPerJobAll();
-
 }

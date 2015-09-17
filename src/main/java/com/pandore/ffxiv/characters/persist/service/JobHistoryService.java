@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pandore.ffxiv.characters.persist.config.JobInfoRepository;
+import com.pandore.ffxiv.characters.persist.entity.XIVCharacter;
+import com.pandore.ffxiv.characters.persist.entity.XIVJob;
 import com.pandore.ffxiv.characters.persist.entity.XIVJobInfoHistory;
 
 @Component
@@ -16,6 +18,15 @@ public class JobHistoryService {
 
 	@Autowired
 	private JobInfoRepository jobHistoryRepository;
+	
+	
+	public List<XIVJobInfoHistory> findByCharacterAndJobOrderByDateAsc(XIVCharacter character, XIVJob job) {
+		return jobHistoryRepository.findByCharacterAndJobOrderByDateAsc(character, job);
+	}
+	
+	public XIVJobInfoHistory findFirstByCharacterAndJobOrderByDateDesc(XIVCharacter character, XIVJob job) {
+		return jobHistoryRepository.findFirstByCharacterAndJobOrderByDateDesc(character, job);
+	}
 	
 	@Transactional
 	public List<XIVJobInfoHistory> getCurrentHistory() {

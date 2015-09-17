@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import com.pandore.ffxiv.characters.persist.entity.XIVRole;
 
 
-//@RepositoryRestResource(collectionResourceRel="roles", path="roles")
 public interface RoleRepository extends PagingAndSortingRepository<XIVRole, Long> {
 
 	List<XIVRole> findByName(@Param("name") String name);

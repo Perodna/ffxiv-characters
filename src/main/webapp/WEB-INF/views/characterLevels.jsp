@@ -76,7 +76,7 @@
 						<tbody>
 							<c:forEach items="${levels}" var="l">
 							<tr>
-								<td class="vert-align"><a href="character?chardId=${l.character.id}">${l.character.firstName} ${l.character.lastName}</a></td>
+								<td class="vert-align"><a href="character?charId=${l.character.id}">${l.character.firstName} ${l.character.lastName}</a></td>
 								<td class="vert-align"><span class="badge badge-${l.job.shortName}">${l.job.shortName}</span></td>
 								<td class="vert-align">${l.level}</td>
 								<td class="vert-align">${l.iLevel}</td>
