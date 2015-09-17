@@ -1,59 +1,3 @@
-//function drawJobsPie(rows, title, div) {
-//	var data = new google.visualization.DataTable();
-//    data.addColumn('string', 'Job');
-//    data.addColumn('number', 'Characters');
-//    data.addRows(rows);
-//    var options = {
-//    	    'title': title,
-//    	    'pieHole': 0.5, // make it a donut
-//    	    'height': 400,
-//    	    'width': '100%',
-//    	    'chartArea': { width:'75%',height:'75%'},
-//	  	    'colors': [
-//		  	    getJobColorCode('PLD'),
-//				getJobColorCode('WAR'),
-//				getJobColorCode('WHM'),
-//				getJobColorCode('SCH'),
-//				getJobColorCode('MNK'),
-//				getJobColorCode('DRG'),
-//				getJobColorCode('NIN'),
-//				getJobColorCode('BRD'),
-//				getJobColorCode('BLM'),
-//				getJobColorCode('SMN')
-//			]
-//   	};
-//    var chart = new google.visualization.PieChart(document.getElementById(div));
-//    chart.draw(data, options);
-//};
-
-
-function getPieJobColors(data) {
-	var jobColors = {
-		'PLD': '#1B98E0',
-		'WAR': '#247BA0',
-		'DRK': '#006494',
-		'WHM': '#049016',
-		'SCH': '#41B338',
-		'AST': '#7FD75B',
-		'MNK': '#97071B',
-		'DRG': '#A82721',
-		'NIN': '#B94728',
-		'BRD': '#CB682E',
-		'MCH': '#DC8835',
-		'BLM': '#EDA83B',
-		'SMN': '#FFC942'
-	};
-	
-	var slicesColor = {};
-
-	for( var i=0; i < data.getNumberOfRows(); i++) {
-		// label is in the first column of each row
-		slicesColor[i] = {color: jobColors[data.getValue(i, 0)] };
-	}
-	
-	return slicesColor;
-}
-
 function drawJobsPie(jsonData, title, div) {	
 	var data = new google.visualization.DataTable(jsonData);
 	
@@ -130,6 +74,21 @@ function drawRolesDiffBars(jsonData, title, div) {
     chart.draw(view, options);
 }
 
+function drawJobEvolutionLineChart(jsonData, title, div) {
+	var data = new google.visualization.DataTable(jsonData);
+
+	var options = {
+		chart : { 'title' : title }, // not used by standard line chart, hopefully the functionality is added soon
+		width : "100%",
+		height : 500,
+		series : getSeriesForLineChartData(data) // series color change not supported by Material Line chart, reason why we stick to standard line chart
+	};
+
+	var chart = new google.visualization.LineChart(document.getElementById(div));
+	chart.draw(data, options);
+}
+
+
 function getValueAt(column, dataTable, row) {
     return (dataTable.getValue(row, column) * 100).toFixed(2) + ' %';
 }
@@ -147,42 +106,47 @@ function getSeriesForLineChartData(dataTable) {
 }
 
 
-function getJobColorCode(jobName) {
-	switch (jobName) {
-	case 'PLD':
-		return '#28459D';
-	case 'WAR':
-		return '#425DAE';
-	case 'WHM':
-		return '#116416';
-	case 'SCH':
-		return '#54A759';
-	case 'MNK':
-		return '#E93325';
-	case 'DRG':
-		return '#FF594C';
-	case 'NIN':
-		return '#FF978F';
-	case 'BRD':
-		return '#FF814C';
-	case 'BLM':
-		return '#E98925';
-	case 'SMN':
-		return '#FFA84C';
-	default:
-		return null;
+// ----------------------------------
+//  COLOR FUNCTIONS FOR JOBS & ROLES
+// ----------------------------------
+
+var jobColors = {
+	'PLD': '#1B98E0',
+	'WAR': '#247BA0',
+	'DRK': '#006494',
+	'WHM': '#049016',
+	'SCH': '#41B338',
+	'AST': '#7FD75B',
+	'MNK': '#97071B',
+	'DRG': '#A82721',
+	'NIN': '#B94728',
+	'BRD': '#CB682E',
+	'MCH': '#DC8835',
+	'BLM': '#EDA83B',
+	'SMN': '#FFC942'
+};
+
+var roleColors = {
+	'Tank': '#28459D',
+	'Healer': '#116416',
+	'DPS': '#E93325'
+};
+
+function getPieJobColors(data) {
+	var slicesColor = {};
+
+	for(var i=0; i < data.getNumberOfRows(); i++) {
+		// label is in the first column of each row
+		slicesColor[i] = {color: jobColors[data.getValue(i, 0)] };
 	}
+	
+	return slicesColor;
+}
+
+function getJobColorCode(jobName) {
+	return jobColors[jobName];
 }
 
 function getRoleColorCode(roleName) {
-	switch (roleName) {
-	case 'Tank':
-		return '#28459D';
-	case 'Healer':
-		return '#116416';
-	case 'DPS':
-		return '#E93325';
-	default:
-		return null;
-	}
+	return roleColors[roleName];
 }

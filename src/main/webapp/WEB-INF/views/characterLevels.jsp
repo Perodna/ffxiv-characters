@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <c:set var="cp" value="${pageContext.request.servletContext.contextPath}" scope="request" />
 
@@ -20,54 +21,9 @@
 <script src="static/js/stats.js" type="text/javascript"></script>
 <link href="static/css/stats.css" rel="stylesheet">
 
-<!--Google charts -->
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript">
 
-  // Load the Visualization API and the piechart package.
-  google.load('visualization', '1', {'packages':['corechart']});
 
-  // Set a callback to run when the Google Visualization API is loaded.
-  google.setOnLoadCallback(drawChart);
-
-  // Callback that creates and populates a data table,
-  // instantiates the pie chart, passes in the data and
-  // draws it.
-  function drawChart() {
-
-    // Main jobs
-    $.ajax({
-		url : "jobsData?jobsType=main",
-		dataType : "json",
-		async : true,
-		success : function(jsonDataMain) {
-				drawJobsPie(jsonDataMain, 'Main jobs distribution', 'main_jobs');
-			}
-	});
-    
- 	// Alt jobs
-    $.ajax({
-		url : "jobsData?jobsType=alt",
-		dataType : "json",
-		async : true,
-		success : function(jsonDataAlt) {
-				drawJobsPie(jsonDataAlt, 'Alt jobs distribution', 'alt_jobs');
-			}
-	});
-    
- 	// All jobs
-    $.ajax({
-		url : "jobsData?jobsType=all",
-		dataType : "json",
-		async : true,
-		success : function(jsonDataAll) {
-				drawJobsPie(jsonDataAll, 'All jobs distribution (mains & alts)', 'all_jobs');
-			}
-	});
-  }
-</script>
-
-<title>Jobs statistics</title>
+<title>Characters list</title>
 </head>
 <body>
 	<div class="container">
@@ -90,10 +46,10 @@
 						</div>
 						<div class="navbar-collapse collapse sidebar-navbar-collapse">
 							<ul class="nav navbar-nav">
-								<li class="active"><a href="#">Jobs</a></li>
+								<li><a href="jobs">Jobs</a></li>
 								<li><a href="roles">Roles</a></li>
 								<li><a href="characters">Characters</a></li>
-								<li><a href="characterLevels">All levels</a></li>
+								<li class="active"><a href="#">All levels</a></li>
 							</ul>
 						</div>
 						<!--/.nav-collapse -->
@@ -103,11 +59,33 @@
 			
 			<!-- Main content goes here -->
 			<div class="col-sm-9">
-				<div><h5>Jobs distribution</h5></div>
+				<div><h5>Characters list</h5></div>
 			
-				<div id="main_jobs"></div>
-				<div id="alt_jobs"></div>
-				<div id="all_jobs"></div>
+				<div>
+					<table class="table table-striped table-hover table-condensed table-responsive">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Job</th>
+								<th>Level</th>
+								<th>iLevel</th>
+								<th>Last change</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							<c:forEach items="${levels}" var="l">
+							<tr>
+								<td class="vert-align"><a href="character?chardId=${l.character.id}">${l.character.firstName} ${l.character.lastName}</a></td>
+								<td class="vert-align"><span class="badge badge-${l.job.shortName}">${l.job.shortName}</span></td>
+								<td class="vert-align">${l.level}</td>
+								<td class="vert-align">${l.iLevel}</td>
+								<td class="vert-align"><fmt:formatDate value="${l.date}" pattern="dd/MM/yyyy - HH:mm"/></td>
+							</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>

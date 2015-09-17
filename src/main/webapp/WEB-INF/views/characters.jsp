@@ -48,6 +48,7 @@
 								<li><a href="jobs">Jobs</a></li>
 								<li><a href="roles">Roles</a></li>
 								<li class="active"><a href="#">Characters</a></li>
+								<li><a href="characterLevels">All levels</a></li>
 							</ul>
 						</div>
 						<!--/.nav-collapse -->

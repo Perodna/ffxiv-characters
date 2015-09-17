@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,12 +22,16 @@ import com.pandore.ffxiv.characters.persist.config.JobInfoRepository;
 import com.pandore.ffxiv.characters.persist.entity.XIVCharacter;
 import com.pandore.ffxiv.characters.persist.entity.XIVJob;
 import com.pandore.ffxiv.characters.persist.entity.XIVJobInfoHistory;
+import com.pandore.ffxiv.characters.persist.service.JobHistoryService;
 
 @Controller
 public class CharacterController implements BeanFactoryAware {
 	
 	CharacterRepository charRepo;
 	JobInfoRepository jobInfoRepo;
+	
+	@Autowired
+	private JobHistoryService historyService;
 	
 	@Override
 	public void setBeanFactory(BeanFactory context) throws BeansException {
@@ -50,6 +55,13 @@ public class CharacterController implements BeanFactoryAware {
 			.addObject("c", character)
 			.addObject("mainJobLevel", mainJobLevel)
 		;
+	}
+	
+	@RequestMapping(value = "/characterLevels", method = RequestMethod.GET)
+	public ModelAndView characterLevels() {
+		List<XIVJobInfoHistory> levels = historyService.getCurrentHistory();
+		
+		return new ModelAndView("characterLevels").addObject("levels", levels);
 	}
 	
 	@RequestMapping(value="/characterJobData", method = RequestMethod.GET)

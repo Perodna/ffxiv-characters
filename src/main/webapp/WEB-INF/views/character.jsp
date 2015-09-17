@@ -26,27 +26,14 @@
 	google.setOnLoadCallback(drawChart);
 
 	function drawChart() {
-
-		var jsonData = $.ajax({
+		$.ajax({
 			url : "characterJobData?charId=${c.id}",
 			dataType : "json",
-			async : false
-		}).responseText;
-
-		console.log(jsonData);
-		
-		var data = new google.visualization.DataTable(jsonData);
-
-		var options = {
-			chart : { title : 'iLevel evolution by job' }, // not used by standard line chart, hopefully the functionality is added soon
-			width : "100%",
-			height : 500,
-			series : getSeriesForLineChartData(data) // series color change not supported by Material Line chart, reason why we stick to standard line chart
-		};
-
-		var chart = new google.visualization.LineChart(document.getElementById('job_lvl_evolution'));
-
-		chart.draw(data, options);
+			async : true,
+			success : function(jsonData) {
+					drawJobEvolutionLineChart(jsonData, 'iLevel evolution by job', 'job_lvl_evolution');
+				}
+		});
 	}
 </script>
 
@@ -76,6 +63,7 @@
 								<li><a href="jobs">Jobs</a></li>
 								<li><a href="roles">Roles</a></li>
 								<li><a href="characters">Characters</a></li>
+								<li><a href="characterLevels">All levels</a></li>
 							</ul>
 						</div>
 						<!--/.nav-collapse -->
@@ -88,14 +76,16 @@
 				<div><h5>Character info</h5></div>
 			
 				<div>
-					<p>First name: ${c.firstName}</p>
-					<p>Last name: ${c.lastName}</p>
+					<p>Name: ${c.firstName}&nbsp;${c.lastName}</p>
 					<p>Main job: <span class="badge badge-${c.mainJob.shortName}">${c.mainJob.shortName}</span> - iLevel: ${mainJobLevel} </p>
 					<p>Alt jobs: <c:forEach items="${c.jobs}" var="j"><c:if test="${j.id != c.mainJob.id}"><span class="badge badge-${j.shortName}">${j.shortName}</span>&nbsp;</c:if></c:forEach></p>
 					
 					<div>
 					<!-- Won't work for a character with a quote ' in his name -->
-					<p><a href="http://www.inwilis.fr/inventaire/char.php?name=${c.firstName}%20${c.lastName}">Open gear details</a></p>
+					<p>
+						<a href="http://www.inwilis.fr/inventaire/char.php?name=${c.firstName}%20${c.lastName}">Open gear details</a><br>
+						<a href="http://eu.finalfantasyxiv.com/lodestone/character/${c.lodestoneId}/">Open Lodestone profile</a>
+					</p>
 					</div>
 					
 					<div>

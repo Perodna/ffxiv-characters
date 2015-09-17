@@ -96,6 +96,7 @@
 								<li><a href="jobs">Jobs</a></li>
 								<li class="active"><a href="#">Roles</a></li>
 								<li><a href="characters">Characters</a></li>
+								<li><a href="characterLevels">All levels</a></li>
 							</ul>
 						</div>
 						<!--/.nav-collapse -->
