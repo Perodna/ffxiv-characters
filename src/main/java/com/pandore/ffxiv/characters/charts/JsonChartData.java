@@ -126,6 +126,37 @@ public class JsonChartData {
 		this.cols = columns;
 		this.rows = rows;
 	}
+	
+	public void setRoleStatsData(Map<String, Long> rolesStats) {
+		// Set Columns
+		Column[] columns = new Column[2];
+		
+		columns[0] = new Column("role", "Role", "string");
+		columns[1] = new Column("popularity", "Popularity", "number");
+		
+		
+		// Set rows, ordered by role
+		TreeSet<String> sortedRoles = new TreeSet<String>(new Comparator<String>() {
+			@Override
+			public int compare(String r1, String r2) {
+				return JsonDataUtil.getNaturalRoleOrdering(r1) - JsonDataUtil.getNaturalRoleOrdering(r2);
+			}
+		});
+		sortedRoles.addAll(rolesStats.keySet());
+		
+		Row[] rows = new Row[rolesStats.size()];
+		int i= 0;
+		for (String role : sortedRoles) {
+			Cell[] cells = new Cell[columns.length];
+			cells[0] = new Cell(role, role);
+			cells[1] = new Cell(rolesStats.get(role), null);
+			rows[i] = new Row(cells);
+			i++;
+		}
+		
+		this.cols = columns;
+		this.rows = rows;
+	}
 
 	public void setJobInfoHistoryData(Map<XIVJob, List<XIVJobInfoHistory>> allJobsInfos) {
 		Map<Date, Cell[]> dataByDate = new HashMap<Date, Cell[]>();

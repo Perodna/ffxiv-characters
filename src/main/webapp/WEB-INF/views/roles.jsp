@@ -35,32 +35,38 @@
   // draws it.
   function drawChart() {
 
-    // Main jobs
-    var mainRolesRows = [
-		['Tank', ${mainRoles["Tank"]}],
-		['Healer', ${mainRoles["Healer"]}],
-		['DPS', ${mainRoles["DPS"]}]
-    ];
-    drawRolesPie(mainRolesRows, 'Main roles distribution', 'main_roles');
-    drawRolesDiffBars(mainRolesRows, '% difference compared to ideal distribution', 'main_roles_diff');
+    // Main job roles
+    $.ajax({
+		url : "rolesData?rolesType=main",
+		dataType : "json",
+		async : true,
+		success : function(jsonDataMain) {
+				drawRolesPie(jsonDataMain, 'Main roles distribution', 'main_roles');
+			    drawRolesDiffBars(jsonDataMain, '% difference compared to ideal distribution', 'main_roles_diff');
+			}
+	});
 
- 	// Alt roles
-    var altRolesRows = [
-		['Tank', ${altRoles["Tank"]}],
-		['Healer', ${altRoles["Healer"]}],
-		['DPS', ${altRoles["DPS"]}]
-    ];
-    drawRolesPie(altRolesRows, 'Alt roles distribution', 'alt_roles');
-    drawRolesDiffBars(altRolesRows, '% difference compared to ideal distribution', 'alt_roles_diff');
+ 	// Alt job roles
+    $.ajax({
+		url : "rolesData?rolesType=main",
+		dataType : "json",
+		async : true,
+		success : function(jsonDataAlt) {
+				drawRolesPie(jsonDataAlt, 'Alt roles distribution', 'alt_roles');
+			    drawRolesDiffBars(jsonDataAlt, '% difference compared to ideal distribution', 'alt_roles_diff');
+			}
+	});
     
- 	// All roles
-    var allRolesRows = [
-		['Tank', ${allRoles["Tank"]}],
-		['Healer', ${allRoles["Healer"]}],
-		['DPS', ${allRoles["DPS"]}]
-    ];
-    drawRolesPie(allRolesRows, 'All roles distribution (mains & alts)', 'all_roles');
-    drawRolesDiffBars(allRolesRows, '% difference compared to ideal distribution', 'all_roles_diff');
+ 	// All job roles
+ 	$.ajax({
+		url : "rolesData?rolesType=main",
+		dataType : "json",
+		async : true,
+		success : function(jsonDataAll) {
+			    drawRolesPie(jsonDataAll, 'All roles distribution (mains & alts)', 'all_roles');
+			    drawRolesDiffBars(jsonDataAll, '% difference compared to ideal distribution', 'all_roles_diff');
+			}
+	});
   }
 </script>
 

@@ -11,8 +11,11 @@ import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.pandore.ffxiv.characters.charts.JsonChartData;
 import com.pandore.ffxiv.characters.persist.config.CharacterRepository;
 import com.pandore.ffxiv.characters.persist.config.JobRepository;
 import com.pandore.ffxiv.characters.persist.config.RoleRepository;
@@ -33,14 +36,33 @@ public class RoleStatsController implements BeanFactoryAware  {
 	
 	@RequestMapping(value = "/roles", method = RequestMethod.GET)
 	public ModelAndView roles() {
-		List<Object[]> mainRoles = roleRepo.findCountPerMainRole();
-		List<Object[]> altRoles = roleRepo.findCountPerAltRole();
-		List<Object[]> allRoles = roleRepo.findCountPerRoleAll();
+		return new ModelAndView("roles");
+	}
+	
+	@RequestMapping(value="/rolesData", method = RequestMethod.GET)
+	public @ResponseBody JsonChartData getRoleChartData(@RequestParam(required=true) String rolesType) {
+		Map<String, Long> rolesData;
 		
-		return new ModelAndView("roles")
-			.addObject("mainRoles", transformMainToMap(mainRoles))
-			.addObject("altRoles", transformAltToMap(altRoles))
-			.addObject("allRoles", transformAllToMap(allRoles));
+		switch (rolesType) {
+		case "main":
+			List<Object[]> mainRoles = roleRepo.findCountPerMainRole();
+			rolesData = transformMainToMap(mainRoles);
+			break;
+		case "alt":
+			List<Object[]> altRoles = roleRepo.findCountPerAltRole();
+			rolesData = transformAltToMap(altRoles);
+			break;
+		case "all":
+			List<Object[]> allRoles = roleRepo.findCountPerRoleAll();
+			rolesData = transformAllToMap(allRoles);
+			break;
+		default:
+			return null;
+		}
+		
+		JsonChartData jsonData = new JsonChartData();
+		jsonData.setRoleStatsData(rolesData);
+		return jsonData;
 	}
 	
 	private Map<String, Long> transformMainToMap(List<Object[]> distribution) {

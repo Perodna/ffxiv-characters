@@ -17,5 +17,6 @@ public interface CharacterRepository extends PagingAndSortingRepository<XIVChara
 	XIVCharacter findFirstByLodestoneId(@Param("lodestoneId") String lodestoneId);
 	
 	@Query("select c from XIVCharacter c where c.mainJob.id = :mainJobId")
-	List<XIVCharacter> findByMainJob(@Param("mainJobId") long mainJobId);	
+	List<XIVCharacter> findByMainJob(@Param("mainJobId") long mainJobId);
+	
 }

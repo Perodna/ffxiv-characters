@@ -36,28 +36,34 @@
   function drawChart() {
 
     // Main jobs
-    var jsonData = $.ajax({
+    $.ajax({
 		url : "jobsData?jobsType=main",
 		dataType : "json",
-		async : false
-	}).responseText;
-    drawJobsPie(jsonData, 'Main jobs distribution', 'main_jobs');
-
+		async : true,
+		success : function(jsonDataMain) {
+				drawJobsPie(jsonDataMain, 'Main jobs distribution', 'main_jobs');
+			}
+	});
+    
  	// Alt jobs
-    var jsonData = $.ajax({
+    $.ajax({
 		url : "jobsData?jobsType=alt",
 		dataType : "json",
-		async : false
-	}).responseText;
-    drawJobsPie(jsonData, 'Alt jobs distribution', 'alt_jobs');
+		async : true,
+		success : function(jsonDataAlt) {
+				drawJobsPie(jsonDataAlt, 'Alt jobs distribution', 'alt_jobs');
+			}
+	});
     
  	// All jobs
-    var jsonData = $.ajax({
+    $.ajax({
 		url : "jobsData?jobsType=all",
 		dataType : "json",
-		async : false
-	}).responseText;
-    drawJobsPie(jsonData, 'All jobs distribution (mains & alts)', 'all_jobs');
+		async : true,
+		success : function(jsonDataAll) {
+				drawJobsPie(jsonDataAll, 'All jobs distribution (mains & alts)', 'all_jobs');
+			}
+	});
   }
 </script>
 

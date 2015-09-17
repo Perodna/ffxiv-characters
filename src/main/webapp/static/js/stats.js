@@ -69,11 +69,9 @@ function drawJobsPie(jsonData, title, div) {
     chart.draw(data, options);
 };
 
-function drawRolesPie(rows, title, div) {
-	var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Role');
-    data.addColumn('number', 'Characters');
-    data.addRows(rows);
+function drawRolesPie(jsonData, title, div) {
+	var data = new google.visualization.DataTable(jsonData);
+
     var options = {
     	    'title': title,
     	    'pieHole': 0.5, // make it a donut
@@ -90,16 +88,17 @@ function drawRolesPie(rows, title, div) {
     chart.draw(data, options);
 };
 
-function drawRolesDiffBars(numbers, title, div) {
+function drawRolesDiffBars(jsonData, title, div) {
+	var tmpData = new google.visualization.DataTable(jsonData);
 	var total = 0;
 	
-	for (var i = 0; i < numbers.length; i++) {
-		total += numbers[i][1];
+	for (var i = 0; i < tmpData.getNumberOfRows(); i++) {
+		total += tmpData.getValue(i, 1);
 	}
 	
-	var tankDiff = numbers[0][1] / total / 0.25 - 1;
-	var healerDiff = numbers[1][1] / total / 0.25 - 1;
-	var dpsDiff = numbers[2][1] / total / 0.5 - 1;
+	var tankDiff = tmpData.getValue(0, 1) / total / 0.25 - 1;
+	var healerDiff = tmpData.getValue(1, 1) / total / 0.25 - 1;
+	var dpsDiff = tmpData.getValue(2, 1) / total / 0.5 - 1;
 	
 	var rows = [ ['Tank', tankDiff], ['Healer', healerDiff], ['DPS', dpsDiff] ];
 	

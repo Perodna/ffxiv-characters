@@ -34,15 +34,8 @@ public class JobStatsController implements BeanFactoryAware {
 	}
 	
 	@RequestMapping(value = "/jobs", method = RequestMethod.GET)
-	public ModelAndView jobs() {
-//		List<Object[]> mainJobs = jobRepo.findCountPerMainJob();
-//		List<Object[]> altJobs = jobRepo.findCountPerAltJob();
-//		List<Object[]> allJobs = jobRepo.findCountPerJobAll();
-		
+	public ModelAndView jobs() {		
 		return new ModelAndView("jobs");
-//			.addObject("mainJobs", transformMainToMap(mainJobs))
-//			.addObject("altJobs", transformAltToMap(altJobs))
-//			.addObject("allJobs", transformAllToMap(allJobs));
 	}
 	
 	@RequestMapping(value="/jobsData", method = RequestMethod.GET)
