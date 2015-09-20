@@ -10,13 +10,13 @@ import com.pandore.ffxiv.characters.persist.entity.XIVCharacter;
 
 public interface CharacterRepository extends PagingAndSortingRepository<XIVCharacter, Long> {
 	
-	List<XIVCharacter> findAllByOrderByFirstNameAscLastNameAsc();
-	List<XIVCharacter> findByFirstNameLikeIgnoreCase(@Param("firstName") String firstName);
-	List<XIVCharacter> findByLastNameLikeIgnoreCase(@Param("lastName") String lastName);
-	List<XIVCharacter> findByFirstNameAndLastName(@Param("firstName") String firstName, @Param("lastName") String lastName);
-	XIVCharacter findFirstByLodestoneId(@Param("lodestoneId") String lodestoneId);
+	public List<XIVCharacter> findAllByOrderByFirstNameAscLastNameAsc();
+	public List<XIVCharacter> findByFirstNameLikeIgnoreCase(@Param("firstName") String firstName);
+	public List<XIVCharacter> findByLastNameLikeIgnoreCase(@Param("lastName") String lastName);
+	public List<XIVCharacter> findByFirstNameAndLastName(@Param("firstName") String firstName, @Param("lastName") String lastName);
+	public XIVCharacter findFirstByLodestoneId(@Param("lodestoneId") String lodestoneId);
 	
 	@Query("select c from XIVCharacter c where c.mainJob.id = :mainJobId")
-	List<XIVCharacter> findByMainJob(@Param("mainJobId") long mainJobId);
+	public List<XIVCharacter> findByMainJob(@Param("mainJobId") long mainJobId);
 	
 }

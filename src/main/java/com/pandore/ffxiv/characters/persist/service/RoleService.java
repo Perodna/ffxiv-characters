@@ -16,9 +16,13 @@ public class RoleService {
 	
 	@Autowired
 	private RoleRepository roleRepository;
+	
+	public List<XIVRole> findAll() {
+		return roleRepository.findAllByOrderByIdAsc();
+	}
 
-	public List<XIVRole> findByName(String name) {
-		return roleRepository.findByName(name);
+	public XIVRole findByName(String name) {
+		return roleRepository.findFirstByName(name);
 	}
 	
 	public Map<String, Long> findCountPerMainRole() {

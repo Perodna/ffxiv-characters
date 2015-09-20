@@ -34,10 +34,10 @@ public class XIVJobInfoHistory {
 	Date date;
 	
 	@Column(name = "ilevel", nullable = false)
-	Integer iLevel;
+	int iLevel;
 	
 	@Column(name = "level", nullable = false)
-	Integer level;
+	int level;
 	
 	
 	protected XIVJobInfoHistory() {
@@ -55,7 +55,7 @@ public class XIVJobInfoHistory {
 		this.date = date;
 	}
 
-	public XIVJobInfoHistory(XIVCharacter character, XIVJob job, Date date, Integer iLevel, Integer level) {
+	public XIVJobInfoHistory(XIVCharacter character, XIVJob job, Date date, int iLevel, int level) {
 		super();
 		this.character = character;
 		this.job = job;
@@ -96,19 +96,19 @@ public class XIVJobInfoHistory {
 		this.date = date;
 	}
 
-	public Integer getiLevel() {
+	public int getiLevel() {
 		return iLevel;
 	}
 
-	public void setiLevel(Integer iLevel) {
+	public void setiLevel(int iLevel) {
 		this.iLevel = iLevel;
 	}
 
-	public Integer getLevel() {
+	public int getLevel() {
 		return level;
 	}
 
-	public void setLevel(Integer level) {
+	public void setLevel(int level) {
 		this.level = level;
 	}
 

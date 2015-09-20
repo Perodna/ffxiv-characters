@@ -18,6 +18,9 @@
 <script src="static/js/bootstrap.min.js" type="text/javascript"></script>
 <link href="static/css/bootstrap.paper.min.css" rel="stylesheet">
 
+<script src="static/js/bootstrap-select.min.js" type="text/javascript"></script>
+<link href="static/css/bootstrap-select.min.css" rel="stylesheet">
+
 <script src="static/js/stats.js" type="text/javascript"></script>
 <link href="static/css/stats.css" rel="stylesheet">
 
@@ -59,7 +62,39 @@
 			
 			<!-- Main content goes here -->
 			<div class="col-sm-9">
-				<div><h5>Characters list</h5></div>
+				<div><h4>Levels list</h4></div>
+				<br>
+				<div>
+					<form class="form-horizontal" role="form" action="characterLevels">
+					
+						<div class="form-group">
+							<select class="selectpicker" title='Filter by role' name="role">
+								<c:forEach items="${roles}" var="r">
+								<option value="${r.name}">${r.name}</option>
+								</c:forEach>
+							</select>
+							<select class="selectpicker" title='Filter by job' name="job">
+								<optgroup label="Tanks">
+									<c:forEach items="${tanks}" var="j">
+									<option value="${j.shortName}">${j.shortName}</option>
+									</c:forEach>
+								</optgroup>
+								<optgroup label="Healers">
+									<c:forEach items="${healers}" var="j">
+									<option value="${j.shortName}">${j.shortName}</option>
+									</c:forEach>
+								</optgroup>
+								<optgroup label="DPS">
+									<c:forEach items="${dps}" var="j">
+									<option value="${j.shortName}">${j.shortName}</option>
+									</c:forEach>
+								</optgroup>
+							</select>
+							<button class="btn" type="submit">Filter</button>
+						</div>
+					</form>
+				</div>
+				<br>
 			
 				<div>
 					<table class="table table-striped table-hover table-condensed table-responsive">
@@ -76,7 +111,7 @@
 						<tbody>
 							<c:forEach items="${levels}" var="l">
 							<tr>
-								<td class="vert-align"><a href="character?charId=${l.character.id}">${l.character.firstName} ${l.character.lastName}</a></td>
+								<td class="vert-align"><a href="character?charId=${l.character.id}">${l.character.fullName}</a></td>
 								<td class="vert-align"><span class="badge badge-${l.job.shortName}">${l.job.shortName}</span></td>
 								<td class="vert-align">${l.level}</td>
 								<td class="vert-align">${l.iLevel}</td>

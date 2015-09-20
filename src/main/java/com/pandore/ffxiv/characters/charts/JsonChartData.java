@@ -194,7 +194,7 @@ public class JsonChartData {
 					dataByDate.put(date, cells);
 				}
 				
-				dataByDate.get(date)[jobColumn].setV(jobInfo.getiLevel().toString());
+				dataByDate.get(date)[jobColumn].setV(jobInfo.getiLevel());
 			}
 			
 			jobColumn++;

@@ -10,6 +10,16 @@ function drawJobsPie(jsonData, title, div) {
     	    'slices': getPieJobColors(data)
    	};
     var chart = new google.visualization.PieChart(document.getElementById(div));
+    
+    function selectJobHandler() {
+		var selectedItem = chart.getSelection()[0];
+		if (selectedItem) {
+			var job = data.getValue(selectedItem.row, 0);
+			window.location.href = "characterLevels?job="+job;
+		}
+    }
+    google.visualization.events.addListener(chart, 'select', selectJobHandler);
+    
     chart.draw(data, options);
 };
 
@@ -22,13 +32,19 @@ function drawRolesPie(jsonData, title, div) {
     	    'height': 400,
     	    'width': '100%',
     	    'chartArea': { width:'75%',height:'75%'},
-	  	    'colors': [
-		  	    getRoleColorCode('Tank'),
-		  	    getRoleColorCode('Healer'),
-		  	    getRoleColorCode('DPS')
-			]
+    	    'slices': getPieRoleColors(data)
    	};
     var chart = new google.visualization.PieChart(document.getElementById(div));
+    
+    function selectRoleHandler() {
+		var selectedItem = chart.getSelection()[0];
+		if (selectedItem) {
+			var role = data.getValue(selectedItem.row, 0);
+			window.location.href = "characterLevels?role="+role;
+		}
+    }
+    google.visualization.events.addListener(chart, 'select', selectRoleHandler);
+    
     chart.draw(data, options);
 };
 
@@ -138,6 +154,17 @@ function getPieJobColors(data) {
 	for(var i=0; i < data.getNumberOfRows(); i++) {
 		// label is in the first column of each row
 		slicesColor[i] = {color: jobColors[data.getValue(i, 0)] };
+	}
+	
+	return slicesColor;
+}
+
+function getPieRoleColors(data) {
+	var slicesColor = {};
+
+	for(var i=0; i < data.getNumberOfRows(); i++) {
+		// label is in the first column of each row
+		slicesColor[i] = {color: roleColors[data.getValue(i, 0)] };
 	}
 	
 	return slicesColor;

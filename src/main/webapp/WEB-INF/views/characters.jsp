@@ -58,7 +58,7 @@
 			
 			<!-- Main content goes here -->
 			<div class="col-sm-9">
-				<div><h5>Characters list</h5></div>
+				<div><h4>Characters list</h4></div>
 			
 				<div>
 					<table class="table table-striped table-hover table-condensed table-responsive">
@@ -73,7 +73,7 @@
 						<tbody>
 							<c:forEach items="${chars}" var="c">
 							<tr>
-								<td class="vert-align"><a href="character?charId=${c.id}">${c.firstName} ${c.lastName}</a></td>
+								<td class="vert-align"><a href="character?charId=${c.id}">${c.fullName}</a></td>
 								<td class="vert-align"><span class="badge badge-${c.mainJob.shortName}">${c.mainJob.shortName}</span></td>
 								<td class="vert-align"><c:forEach items="${c.jobs}" var="j"><c:if test="${j.id != c.mainJob.id}"><span class="badge badge-${j.shortName}">${j.shortName}</span>&nbsp;</c:if></c:forEach></td>
 							</tr>

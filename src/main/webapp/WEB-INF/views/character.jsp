@@ -73,10 +73,10 @@
 			
 			<!-- Main content goes here -->
 			<div class="col-sm-9">
-				<div><h5>Character info</h5></div>
+				<div><h4>Character info</h4></div>
 			
 				<div>
-					<p>Name: ${c.firstName}&nbsp;${c.lastName}</p>
+					<p>Name: ${c.fullName}</p>
 					<p>Main job: <span class="badge badge-${c.mainJob.shortName}">${c.mainJob.shortName}</span> - iLevel: ${mainJobLevel} </p>
 					<p>Alt jobs: <c:forEach items="${c.jobs}" var="j"><c:if test="${j.id != c.mainJob.id}"><span class="badge badge-${j.shortName}">${j.shortName}</span>&nbsp;</c:if></c:forEach></p>
 					

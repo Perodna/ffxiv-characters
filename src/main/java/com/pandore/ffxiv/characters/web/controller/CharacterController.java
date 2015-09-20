@@ -21,6 +21,8 @@ import com.pandore.ffxiv.characters.persist.entity.XIVJob;
 import com.pandore.ffxiv.characters.persist.entity.XIVJobInfoHistory;
 import com.pandore.ffxiv.characters.persist.service.CharacterService;
 import com.pandore.ffxiv.characters.persist.service.JobHistoryService;
+import com.pandore.ffxiv.characters.persist.service.JobService;
+import com.pandore.ffxiv.characters.persist.service.RoleService;
 
 @Controller
 public class CharacterController implements BeanFactoryAware {
@@ -29,6 +31,10 @@ public class CharacterController implements BeanFactoryAware {
 	private CharacterService characterService;
 	@Autowired
 	private JobHistoryService historyService;
+	@Autowired
+	private JobService jobService;
+	@Autowired
+	private RoleService roleService;
 	
 	@Override
 	public void setBeanFactory(BeanFactory context) throws BeansException {
@@ -45,7 +51,7 @@ public class CharacterController implements BeanFactoryAware {
 	@RequestMapping(value = "/character", method = RequestMethod.GET)
 	public ModelAndView character(@RequestParam(required=true) Long charId) {
 		XIVCharacter character= characterService.findOne(charId);
-		Integer mainJobLevel = historyService.findFirstByCharacterAndJobOrderByDateDesc(character, character.getMainJob()).getiLevel();
+		Integer mainJobLevel = historyService.findLastest(character, character.getMainJob()).getiLevel();
 		
 		return new ModelAndView("character")
 			.addObject("c", character)
@@ -54,10 +60,23 @@ public class CharacterController implements BeanFactoryAware {
 	}
 	
 	@RequestMapping(value = "/characterLevels", method = RequestMethod.GET)
-	public ModelAndView characterLevels() {
-		List<XIVJobInfoHistory> levels = historyService.getCurrentHistory();
+	public ModelAndView characterLevels(@RequestParam(required=false) String job, @RequestParam(required=false) String role) {
+		List<XIVJobInfoHistory> levels;
+		if (job != null && !job.isEmpty()) {
+			levels = historyService.getLatestHistoryByJob(job);
+		} else if (role != null && !role.isEmpty()) {
+			levels = historyService.getLatestHistoryByRole(role);
+		} else {
+			levels = historyService.getLatestHistory();
+		}
 		
-		return new ModelAndView("characterLevels").addObject("levels", levels);
+		return new ModelAndView("characterLevels")
+			.addObject("levels", levels)
+			.addObject("roles", roleService.findAll())
+			.addObject("tanks", jobService.findByRoleIgnoreClasses("Tank"))
+			.addObject("healers", jobService.findByRoleIgnoreClasses("Healer"))
+			.addObject("dps", jobService.findByRoleIgnoreClasses("DPS"))
+		;
 	}
 	
 	@RequestMapping(value="/characterJobData", method = RequestMethod.GET)
@@ -68,7 +87,7 @@ public class CharacterController implements BeanFactoryAware {
 		
 		// Get all jobs info
 		for (XIVJob job : character.getJobs()) {
-			List<XIVJobInfoHistory> jobHistories = historyService.findByCharacterAndJobOrderByDateAsc(character, job);
+			List<XIVJobInfoHistory> jobHistories = historyService.findAll(character, job);
 			if (allJobsInfos != null && !jobHistories.isEmpty()) {
 				allJobsInfos.put(job, jobHistories);
 			}

@@ -52,7 +52,7 @@ public class Application {
         System.out.println(character);
         System.out.println();
         
-        XIVJobInfoHistory jobInfo = jobInfoRepo.findFirstByCharacterAndJobOrderByDateDesc(character, jobRepo.findByShortName("SCH").get(0));
+        XIVJobInfoHistory jobInfo = jobInfoRepo.findFirstByCharacterAndJobOrderByDateDesc(character, jobRepo.findFirstByShortName("SCH"));
         System.out.println(jobInfo);
 
         // fetch Characters by last name

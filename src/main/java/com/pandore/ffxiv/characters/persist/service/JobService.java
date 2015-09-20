@@ -9,18 +9,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.pandore.ffxiv.characters.persist.config.JobRepository;
+import com.pandore.ffxiv.characters.persist.config.RoleRepository;
 import com.pandore.ffxiv.characters.persist.entity.XIVJob;
+import com.pandore.ffxiv.characters.persist.entity.XIVRole;
 
 @Component
 public class JobService {
 	
 	@Autowired
 	private JobRepository jobRepository;
+	@Autowired
+	private RoleRepository roleRepository;
 	
-	public List<XIVJob> findByShortName(String shortName) {
-		return jobRepository.findByShortName(shortName);
+	public List<XIVJob> findAll() {
+		return jobRepository.findAllByOrderByIdAsc();
 	}
 	
+	public XIVJob findByShortName(String shortName) {
+		if (shortName == null) {
+			return null;
+		}
+		return jobRepository.findFirstByShortName(shortName.toUpperCase());
+	}
+	
+	/**
+	 * Return all jobs belonging to the specified role, ignoring classes
+	 * @param roleName
+	 * @return
+	 */
+	public List<XIVJob> findByRoleIgnoreClasses(String roleName) {
+		XIVRole role = roleRepository.findFirstByName(roleName);
+		return findByRoleIgnoreClasses(role);
+	}
+	
+	/**
+	 * Return all jobs belonging to the specified role, ignoring classes
+	 * @param role
+	 * @return
+	 */
+	public List<XIVJob> findByRoleIgnoreClasses(XIVRole role) {
+		return jobRepository.findByRoleIgnoreClasses(role);
+	}
 	
 	public Map<String, Long> findCountPerMainJob() {
 		List<Object[]> distribution = jobRepository.findCountPerMainJob();

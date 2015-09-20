@@ -103,7 +103,7 @@
 			
 			<!-- Main content goes here -->
 			<div class="col-sm-9">
-				<div><h5>Jobs distribution</h5></div>
+				<div><h4>Jobs distribution</h4></div>
 			
 				<div id="main_jobs"></div>
 				<div id="alt_jobs"></div>

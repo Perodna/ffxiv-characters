@@ -14,9 +14,9 @@ import com.pandore.ffxiv.characters.persist.entity.XIVJobInfoHistory;
 
 public interface JobInfoRepository extends PagingAndSortingRepository<XIVJobInfoHistory, Long> {
 
-	List<XIVJobInfoHistory> findByCharacterAndJobOrderByDateAsc(@Param("character") XIVCharacter character, @Param("job") XIVJob job);
+	public List<XIVJobInfoHistory> findByCharacterAndJobOrderByDateAsc(@Param("character") XIVCharacter character, @Param("job") XIVJob job);
 	
-	XIVJobInfoHistory findFirstByCharacterAndJobOrderByDateDesc(@Param("character") XIVCharacter character, @Param("job") XIVJob job);
+	public XIVJobInfoHistory findFirstByCharacterAndJobOrderByDateDesc(@Param("character") XIVCharacter character, @Param("job") XIVJob job);
 	
 	
 	@Query(value = "select h.id "
@@ -29,7 +29,33 @@ public interface JobInfoRepository extends PagingAndSortingRepository<XIVJobInfo
 			+ "and h.job_id = t.job_id "
 			+ "and h.date = t.maxdate",
 			nativeQuery = true)
-	List<BigInteger> findAllCurrentIds();
+	public List<BigInteger> findAllCurrentIds();
 	
-	List<XIVJobInfoHistory> findByIdInOrderByLevelDescILevelDescDateAsc(List<Long> idList);
+	@Query(value = "select h.id "
+			+ "from ("
+			+ "  select h.character_id, h.job_id, max(h.date) maxdate "
+			+ "  from job_info_history h "
+			+ "  where h.job_id = :jobId "
+			+ "  group by h.character_id, h.job_id"
+			+ ") t, job_info_history h "
+			+ "where h.character_id = t.character_id "
+			+ "and h.job_id = t.job_id "
+			+ "and h.date = t.maxdate",
+			nativeQuery = true)
+	public List<BigInteger> findAllCurrentIdsByJob(@Param("jobId") Long jobId);
+	
+	@Query(value = "select h.id "
+			+ "from ("
+			+ "  select h.character_id, h.job_id, max(h.date) maxdate "
+			+ "  from job_info_history h, job j "
+			+ "  where h.job_id = j.id and j.role_id = :roleId"
+			+ "  group by h.character_id, h.job_id"
+			+ ") t, job_info_history h "
+			+ "where h.character_id = t.character_id "
+			+ "and h.job_id = t.job_id "
+			+ "and h.date = t.maxdate",
+			nativeQuery = true)
+	public List<BigInteger> findAllCurrentIdsByRole(@Param("roleId") Long roleId);
+	
+	public List<XIVJobInfoHistory> findByIdInOrderByLevelDescILevelDescDateAsc(List<Long> idList);
 }

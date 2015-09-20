@@ -14,6 +14,10 @@ public class CharacterService {
 	@Autowired
 	private CharacterRepository characterRepository;
 	
+	public XIVCharacter save(XIVCharacter character) {
+		return characterRepository.save(character);
+	}
+	
 	public XIVCharacter findOne(Long charId) {
 		return characterRepository.findOne(charId);
 	}

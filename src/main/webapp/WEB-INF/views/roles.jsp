@@ -48,7 +48,7 @@
 
  	// Alt job roles
     $.ajax({
-		url : "rolesData?rolesType=main",
+		url : "rolesData?rolesType=alt",
 		dataType : "json",
 		async : true,
 		success : function(jsonDataAlt) {
@@ -59,7 +59,7 @@
     
  	// All job roles
  	$.ajax({
-		url : "rolesData?rolesType=main",
+		url : "rolesData?rolesType=all",
 		dataType : "json",
 		async : true,
 		success : function(jsonDataAll) {
@@ -106,7 +106,7 @@
 			
 			<!-- Main content goes here -->
 			<div class="col-sm-9">
-				<div><h5>Roles distribution</h5></div>
+				<div><h4>Roles distribution</h4></div>
 				
 				<p>Ideal distribution of roles is 25% of tanks, 25% of healers and 50% of DPS.</p>
 			
