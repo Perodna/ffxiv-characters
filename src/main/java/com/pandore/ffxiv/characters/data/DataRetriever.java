@@ -1,8 +1,10 @@
 package com.pandore.ffxiv.characters.data;
 
 import java.util.Date;
-import java.util.List;
 
+import com.pandore.ffxiv.characters.persist.entity.XIVGearset;
+import com.pandore.ffxiv.characters.persist.service.GearsetService;
+import com.pandore.ffxiv.lodestone.entity.LSItem;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +33,11 @@ public class DataRetriever {
 	private JobService jobService;
 	@Autowired
 	private JobHistoryService historyService;
+	@Autowired
+	private GearsetService gearsetService;
 	
 	
-	@Scheduled(fixedRate = 15*60000)
+//	@Scheduled(fixedRate = 15*60000)
 	public void saveInwilis() {
 		saveFreeCompany("9237023573225243170");
 	}
@@ -84,6 +88,8 @@ public class DataRetriever {
 				character = characterService.save(character);
 			}
 		}
+
+		saveGearSet(lodestoneChar, character, currentJob);
 		
 		// TODO save classes/jobs progression from list of classes on lodestone, once lodestone API provides the info 
 		
@@ -102,5 +108,81 @@ public class DataRetriever {
 				&& (lodestoneInfo.getiLevel() != databaseInfo.getiLevel())) {
 			historyService.save(lodestoneInfo);
 		}
+	}
+
+	private void saveGearSet(LSCharacter lodestoneChar, XIVCharacter character, XIVJob job) {
+		// Get gearset from DB or create a new one
+		XIVGearset gearset = gearsetService.findByCharacterAndJob(character, job);
+		if (gearset == null) {
+			gearset = new XIVGearset();
+			gearset.setCharacter(character);
+			gearset.setJob(job);
+			gearset.setDate(new Date());
+		}
+
+		gearset.setWeaponId(lodestoneChar.getWeapon().getId());
+
+		boolean firstRingAdded = false;
+		for (LSItem item : lodestoneChar.getGearSet()) {
+			firstRingAdded = addItemToGearset(item, gearset, firstRingAdded);
+		}
+
+		gearsetService.save(gearset);
+	}
+
+	/**
+	 * @param item
+	 * @param gearset
+	 * @param firstRingAdded indicates if the new 1st ring has already been modified in the gearset. If true, we should modify the item in the 2nd ring slot.
+	 * @return true if we modified the 1st ring slot, false otherwise.
+	 */
+	private boolean addItemToGearset(LSItem item, XIVGearset gearset, boolean firstRingAdded) {
+		boolean ringAdded = false;
+
+		switch (item.getCategory()) {
+			// LEFT SIDE
+			case "Head":
+				gearset.setHeadId(item.getId());
+				break;
+			case "Body":
+				gearset.setBodyId(item.getId());
+				break;
+			case "Hands":
+				gearset.setHandsId(item.getId());
+				break;
+			case "Waist":
+				gearset.setWaistId(item.getId());
+				break;
+			case "Legs":
+				gearset.setLegsId(item.getId());
+				break;
+			case "Feet":
+				gearset.setFeetId(item.getId());
+				break;
+
+			// RIGHT SIDE
+			case "Earrings":
+				gearset.setEarringsId(item.getId());
+				break;
+			case "Necklace":
+				gearset.setNecklaceId(item.getId());
+				break;
+			case "Bracelets":
+				gearset.setBraceletsId(item.getId());
+				break;
+			case "Ring":
+				if (!firstRingAdded) {
+					gearset.setRing1Id(item.getId());
+					ringAdded = true;
+				} else {
+					gearset.setRing2Id(item.getId());
+				}
+				break;
+			default:
+				// this is the off-hand (can't be a weapon since we shouldn't pass weapons to this method)
+				break;
+		}
+
+		return ringAdded;
 	}
 }

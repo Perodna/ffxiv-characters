@@ -2,6 +2,7 @@ package com.pandore.ffxiv.characters;
 
 import java.util.List;
 
+import com.pandore.ffxiv.characters.data.DataRetriever;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -31,36 +32,39 @@ public class Application {
 		
 		
 		
-//		DataRetriever dataRetriever = context.getBean(DataRetriever.class);
-//		dataRetriever.saveFreeCompany("9237023573225275675"); // The Sanctum
+		DataRetriever dataRetriever = context.getBean(DataRetriever.class);
+		dataRetriever.saveFreeCompany("9237023573225276133"); // small FC
 //		dataRetriever.saveInwilis();
 		
+//		searchCheckup(charRepo, jobRepo, jobInfoRepo);
+	}
 
-        // fetch all Characters
-        Iterable<XIVCharacter> characters = charRepo.findAll();
-        System.out.println("Characters found with findAll():");
-        System.out.println("-------------------------------");
-        for (XIVCharacter character : characters) {
-            System.out.println(character);
-        }
-        System.out.println();
+	private static void searchCheckup(CharacterRepository charRepo, JobRepository jobRepo, JobInfoRepository jobInfoRepo) {
+		// fetch all Characters
+		Iterable<XIVCharacter> characters = charRepo.findAll();
+		System.out.println("Characters found with findAll():");
+		System.out.println("-------------------------------");
+		for (XIVCharacter character : characters) {
+			System.out.println(character);
+		}
+		System.out.println();
 
-        // fetch an individual Character by ID
-        XIVCharacter character = charRepo.findOne(1L);
-        System.out.println("Character found with findOne(1L):");
-        System.out.println("--------------------------------");
-        System.out.println(character);
-        System.out.println();
-        
-        XIVJobInfoHistory jobInfo = jobInfoRepo.findFirstByCharacterAndJobOrderByDateDesc(character, jobRepo.findFirstByShortName("SCH"));
-        System.out.println(jobInfo);
+		// fetch an individual Character by ID
+		XIVCharacter character = charRepo.findOne(1L);
+		System.out.println("Character found with findOne(1L):");
+		System.out.println("--------------------------------");
+		System.out.println(character);
+		System.out.println();
 
-        // fetch Characters by last name
-        List<XIVCharacter> vivis = charRepo.findByFirstNameLikeIgnoreCase("%Vivi%");
-        System.out.println("Characters found with findByFirstNameLikeIgnoreCase('%Vivi%'):");
-        System.out.println("--------------------------------------------");
-        for (XIVCharacter v : vivis) {
-            System.out.println(v);
-        }
+		XIVJobInfoHistory jobInfo = jobInfoRepo.findFirstByCharacterAndJobOrderByDateDesc(character, jobRepo.findFirstByShortName("SCH"));
+		System.out.println(jobInfo);
+
+		// fetch Characters by last name
+		List<XIVCharacter> vivis = charRepo.findByFirstNameLikeIgnoreCase("%Vivi%");
+		System.out.println("Characters found with findByFirstNameLikeIgnoreCase('%Vivi%'):");
+		System.out.println("--------------------------------------------");
+		for (XIVCharacter v : vivis) {
+			System.out.println(v);
+		}
 	}
 }

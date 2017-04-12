@@ -24,20 +24,20 @@ public class XIVJobInfoHistory {
 	
 	@ManyToOne
 	@JoinColumn(name="character_id")
-	XIVCharacter character;
+	private XIVCharacter character;
 	
 	@ManyToOne
 	@JoinColumn(name="job_id")
-	XIVJob job;
+	private XIVJob job;
 	
 	@Column(name = "date", nullable = false)
-	Date date;
+	private Date date;
 	
 	@Column(name = "ilevel", nullable = false)
-	int iLevel;
+	private int iLevel;
 	
 	@Column(name = "level", nullable = false)
-	int level;
+	private int level;
 	
 	
 	protected XIVJobInfoHistory() {

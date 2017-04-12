@@ -26,7 +26,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		
 		<!-- Lodestone parser -->
-		<xiv-lodestone-parser.version>0.0.1-SNAPSHOT</xiv-lodestone-parser.version>
+		<xiv-lodestone-parser.version>0.0.2-SNAPSHOT</xiv-lodestone-parser.version>
 
 		<!-- Spring -->
 		<spring-framework.version>4.1.4.RELEASE</spring-framework.version>
