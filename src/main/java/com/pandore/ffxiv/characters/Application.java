@@ -33,8 +33,8 @@ public class Application {
 		
 		
 		DataRetriever dataRetriever = context.getBean(DataRetriever.class);
-		dataRetriever.saveFreeCompany("9237023573225276133"); // small FC
-//		dataRetriever.saveInwilis();
+//		dataRetriever.saveFreeCompany("9237023573225276133"); // small FC
+		dataRetriever.saveInwilis();
 		
 //		searchCheckup(charRepo, jobRepo, jobInfoRepo);
 	}

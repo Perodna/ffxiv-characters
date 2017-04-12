@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.pandore.ffxiv.characters.persist.entity.XIVGearset;
+import com.pandore.ffxiv.characters.persist.service.*;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -19,10 +21,6 @@ import com.pandore.ffxiv.characters.charts.JsonChartData;
 import com.pandore.ffxiv.characters.persist.entity.XIVCharacter;
 import com.pandore.ffxiv.characters.persist.entity.XIVJob;
 import com.pandore.ffxiv.characters.persist.entity.XIVJobInfoHistory;
-import com.pandore.ffxiv.characters.persist.service.CharacterService;
-import com.pandore.ffxiv.characters.persist.service.JobHistoryService;
-import com.pandore.ffxiv.characters.persist.service.JobService;
-import com.pandore.ffxiv.characters.persist.service.RoleService;
 
 @Controller
 public class CharacterController implements BeanFactoryAware {
@@ -35,6 +33,8 @@ public class CharacterController implements BeanFactoryAware {
 	private JobService jobService;
 	@Autowired
 	private RoleService roleService;
+	@Autowired
+	private GearsetService gearsetService;
 	
 	@Override
 	public void setBeanFactory(BeanFactory context) throws BeansException {
@@ -58,6 +58,20 @@ public class CharacterController implements BeanFactoryAware {
 			.addObject("mainJobLevel", mainJobLevel)
 		;
 	}
+
+	@RequestMapping(value = "/gearset", method = RequestMethod.GET)
+	public ModelAndView characterGearset(@RequestParam(required=true) Long charId, @RequestParam(required=true) String job) {
+		XIVCharacter character= characterService.findOne(charId);
+		XIVJob xivJob = jobService.findByShortName(job);
+
+		XIVGearset gearset = gearsetService.findByCharacterAndJob(character, xivJob);
+
+		return new ModelAndView("gearset")
+				.addObject("c", character)
+				.addObject("j", xivJob)
+				.addObject("g", gearset);
+	}
+
 	
 	@RequestMapping(value = "/characterLevels", method = RequestMethod.GET)
 	public ModelAndView characterLevels(@RequestParam(required=false) String job, @RequestParam(required=false) String role) {

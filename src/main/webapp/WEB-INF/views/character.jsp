@@ -37,7 +37,7 @@
 	}
 </script>
 
-<title>Characters list</title>
+<title>${c.fullName}</title>
 </head>
 <body>
 	<div class="container">
@@ -77,13 +77,12 @@
 			
 				<div>
 					<p>Name: ${c.fullName}</p>
-					<p>Main job: <span class="badge badge-${c.mainJob.shortName}">${c.mainJob.shortName}</span> - iLevel: ${mainJobLevel} </p>
+					<p>Main job: <a href="gearset?charId=${c.id}&job=${c.mainJob.shortName}"><span class="badge badge-${c.mainJob.shortName}">${c.mainJob.shortName}</span></a> - iLevel: ${mainJobLevel} </p>
 					<p>Alt jobs: <c:forEach items="${c.jobs}" var="j"><c:if test="${j.id != c.mainJob.id}"><span class="badge badge-${j.shortName}">${j.shortName}</span>&nbsp;</c:if></c:forEach></p>
 					
 					<div>
 					<!-- Won't work for a character with a quote ' in his name -->
 					<p>
-						<a href="http://www.inwilis.fr/inventaire/char.php?name=${c.firstName}%20${c.lastName}">Open gear details</a><br>
 						<a href="http://eu.finalfantasyxiv.com/lodestone/character/${c.lodestoneId}/">Open Lodestone profile</a>
 					</p>
 					</div>
